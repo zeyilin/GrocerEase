@@ -8,7 +8,9 @@ public class IngredientDatabase {
 
     HashMap<Integer, Ingredient> ingredientDatabase;
 
-    public void addToDatabase();
-    public Ingredient findIngredient();
+    public void addToDatabase(){};
+    public Ingredient findIngredient(){
+        return this.ingredientDatabase.get(0);      // filler return statement
+    }
 
 }

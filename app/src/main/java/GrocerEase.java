@@ -10,8 +10,12 @@ public class GrocerEase {
     IngredientDatabase ingredientDatabase;
     //private userDatabase;
 
-    public RecipeDatabase generateRecipes();
-    public IngredientDatabase generateIngredients();
+    public RecipeDatabase generateRecipes(){
+        return this.recipeDatabase;
+    };
+    public IngredientDatabase generateIngredients(){
+        return this.ingredientDatabase;
+    };
     //public User getUser(); //how will this work with google auth??
 
 }

@@ -8,8 +8,12 @@ public class RecipeDatabase {
 
     HashMap<Integer, Recipe> recipeDatabase;
 
-    public void updateRecipes();
-    public RecipeDatabase exportRecipes();
-    public Recipe generateRecipe();
+    public void updateRecipes(){};
+    public RecipeDatabase exportRecipes(){
+        return this;
+    };
+    public Recipe generateRecipe(){
+        return this.recipeDatabase.get(0);      // filler return statement
+    };
 
 }

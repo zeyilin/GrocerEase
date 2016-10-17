@@ -8,6 +8,6 @@ public class Inventory {
 
     List<Ingredient> pantry;
 
-    public List<Recipe> getRecipes();
+    //public List<Recipe> getRecipes();
 
 }

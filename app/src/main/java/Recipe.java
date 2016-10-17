@@ -13,10 +13,18 @@ public class Recipe {
 
     List<Ingredient> ingredients;
 
-    public String getTitle();
-    public String getDescription();
-    public String getCuisine;
+    public String getTitle(){
+        return this.title;
+    };
+    public String getDescription(){
+        return this.description;
+    };
+    public String getCuisine(){
+        return this.cuisine;
+    };
 
-    public List<Ingredient> getIngredients();
+    public List<Ingredient> getIngredients(){
+        return this.ingredients;
+    };
 
 }
