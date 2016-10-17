@@ -13,6 +13,7 @@ public class Ingredient {
     int ID;
     double price;
 
+
     public String getName();
     public double getQuantity();
     public enum getUnit();
