@@ -8,19 +8,31 @@ public class Ingredient {
 
     String name;
     double quantity;
-    enum unit;
+    //enum unitName;
     String description;
     int ID;
     double price;
 
 
-    public String getName();
-    public double getQuantity();
-    public enum getUnit();
-    public void convertUnit();
-    public String getDescription();
-    public void changeDescription();
-    public int getID();
-    public double getPrice();
+    public String getName(){
+        return this.name;
+    };
+    public double getQuantity(){
+        return this.quantity;
+    };
+
+    //public enum getUnit(){};
+
+    public void convertUnit(){};
+    public String getDescription(){
+        return this.description;
+    };
+    public void changeDescription(){};
+    public int getID(){
+        return this.ID;
+    };
+    public double getPrice(){
+        return this.price;
+    };
 
 }

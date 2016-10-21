@@ -31,4 +31,8 @@ public class GroceryList {
 
     }
 
+    public double totalPrice(){
+        return 0;                   // filler return statement
+    };
+    public void addToPantry(){};
 }
