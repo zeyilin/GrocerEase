@@ -8,6 +8,15 @@ public class RecipeDatabase {
 
     HashMap<Integer, Recipe> recipeDatabase;
 
+    private static RecipeDatabase uniqueInstance;
+
+    public static synchronized RecipeDatabase getInstance() {
+      if (uniqueInstance == null) {
+        uniqueInstance = new Singleton();
+      }
+      return uniqueInstance;
+    }
+
     public void updateRecipes(){};
     public RecipeDatabase exportRecipes(){
         return this;
