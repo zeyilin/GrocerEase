@@ -16,6 +16,11 @@ public class Recipe {
     public String getTitle();
     public String getDescription();
     public String getCuisine;
+    public String convertUnit(List<Ingredient> ingredients, unit)
+      for (ingredient : ingredients) {
+        convert unit for each ingredient to specified unit in parameter
+      }
+    );
 
     public List<Ingredient> getIngredients();
 
