@@ -6,30 +6,42 @@ import java.util.*;
 
 public class Recipe {
 
+    int id;
     String title;
     String description;
-    String cuisine;
-    List<String> shortDescriptions; //used for filtering
 
-    List<Ingredient> ingredients;
+    //List<Ingredient> ingredients;
 
-    public String convertUnit(List<Ingredient> ingredients, unit)
-      for (ingredient : ingredients) {
-        convert unit for each ingredient to specified unit in parameter
-      }
-    );
+    public Recipe(){}
+
+    public Recipe(int id, String title, String description){
+        this.id = id;
+        this.title = title;
+        this.description = description;
+    }
+
+    public void setId(int id){
+        this.id = id;
+    }
+
+    public void setTitle(String title){
+        this.title = title;
+    }
+
+    public void setDescription(String description){
+        this.description = description;
+    }
+
+    public int getId(){
+        return id;
+    }
+
     public String getTitle(){
-        return this.title;
-    };
-    public String getDescription(){
-        return this.description;
-    };
-    public String getCuisine(){
-        return this.cuisine;
-    };
+        return title;
+    }
 
-    public List<Ingredient> getIngredients(){
-        return this.ingredients;
-    };
+    public String getDescription(){
+        return description;
+    }
 
 }
