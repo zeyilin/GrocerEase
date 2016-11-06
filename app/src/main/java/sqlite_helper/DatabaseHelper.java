@@ -1,3 +1,5 @@
+package sqlite_helper;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -6,7 +8,10 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by pascalequeralt on 10/17/16.
  */
 
-public class DBHandler extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
+
+    // Logcat tag
+    private static final String LOG = "DatabaseHelper";
 
     // Database Version
     private static final int DATABASE_VERSION = 1;
@@ -15,14 +20,14 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "grocerEaseData";
 
     // Contacts table name
-    private static final String TABLE_RECIPES = "recipes";
-    //private static final String TABLE_INGREDIENTS = "ingredients";
-    //private static final String TABLE_RECIPES_INGREDIENTS = "recipes_ingredients";
+    private static final String TABLE_RECIPE = "recipes";
+    private static final String TABLE_INGREDIENT = "ingredients";
+    private static final String TABLE_RECIPE_INGREDIENT = "recipes_ingredients";
 
     //Common Column names
     private static final String KEY_ID = "id";
 
-    //RECIPES TABLE column names
+    //RECIPE TABLE column names
     private static final String KEY_TITLE = "title";
     private static final String KEY_CUISINES = "cuisines";
     private static final String KEY_MINUTES = "minutes";
@@ -38,10 +43,21 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String KEY_DAIRY_FREE = "dairy_free";
     private static final String KEY_CHEAP = "cheap";
 
+    //INGREDIENT TABLE column names
+    private static final String KEY_NAME = "name";
+    private static final String KEY_AISLE = "aisle";
+
+    //RECIPE_INGREDIENT column name
+    private static final String KEY_RECIPE_ID = "recipe_id";
+    private static final String KEY_INGREDIENT_ID = "ingredient_id";
+    private static final String KEY_QUANTITY = "quantity";
+    private static final String KEY_UNITS = "units";
+    private static final String KEY_INGREDIENT_STRING = "ingredient_string";
+
     //Table Create Statements
     //Recipes Table create statement
     private static final String CREATE_TABLE_RECIPES = "CREATE TABLE "
-            + TABLE_RECIPES + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TITLE
+            + TABLE_RECIPE + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TITLE
             + " TEXT," + KEY_CUISINES + " TEXT," + KEY_MINUTES + " INTEGER," +
             KEY_IMAGE + " TEXT," + KEY_IMAGE_TYPE + " TEXT," + KEY_INSTRUCTIONS +
             " TEXT," + KEY_SERVINGS + " INTEGER," + KEY_POPULAR + " BOOLEAN," +
@@ -61,11 +77,11 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         // on upgrade drop older tables
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECIPES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECIPE);
 
     }
 
-    public DBHandler(Context context) {
+    public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
