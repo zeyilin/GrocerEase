@@ -1,7 +1,13 @@
 #!/usr/bin/env
 
+# dependences:
+# -unirest
+# -simplejson
+# to install, use pip
+
 import unirest
 import sys
+import simplejson as json
 
 def scrapeRandRecipe(key):
     h = {
@@ -9,8 +15,7 @@ def scrapeRandRecipe(key):
       "Accept": "application/json"
     }
     response = unirest.get("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/random?limitLicense=true&number=1",
-      headers=h
-    )
+      headers=h)
 
     return response.body
 
@@ -39,14 +44,19 @@ def main():
         n = 1
         if len(sys.argv) > 2:
             n = int(sys.argv[2])
-        if n > 50:
-            print "Danger too many recipes!!!! You can't afford that"
-            return
+        # if n > 50:
+        #     print "Danger too many recipes!!!! You can't afford that"
+        #     return
 
         for i in range(n):
-            recipes.append(scrapeRandRecipe(key))
+            recipes.append(scrapeRandRecipe(key)['recipes'])
 
-    saveRecipes(recipes, 'recipes.txt')
+    recipe_data = {}
+    recipe_data['recipes'] = recipes
+    recipe_json_raw = json.dumps(recipe_data, sort_keys=True, indent=2 * ' ')
+    saveRecipes(recipe_json_raw, 'updated_recipes.txt')
+    saveRecipes(recipe_json_raw, 'updated_recipes.json')
+
     print 'Recipes saved'
 
 if __name__ == "__main__":
