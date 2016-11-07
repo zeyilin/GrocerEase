@@ -55,22 +55,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_INGREDIENT_STRING = "ingredient_string";
 
     //Table Create Statements
-    //Recipes Table create statement
-    private static final String CREATE_TABLE_RECIPES = "CREATE TABLE "
+    //RECIPE TABLE create statement
+    private static final String CREATE_TABLE_RECIPE = "CREATE TABLE "
             + TABLE_RECIPE + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TITLE
             + " TEXT," + KEY_CUISINES + " TEXT," + KEY_MINUTES + " INTEGER," +
             KEY_IMAGE + " TEXT," + KEY_IMAGE_TYPE + " TEXT," + KEY_INSTRUCTIONS +
             " TEXT," + KEY_SERVINGS + " INTEGER," + KEY_POPULAR + " BOOLEAN," +
             KEY_HEALTHY + " BOOLEAN," + KEY_VEGETARIAN + " BOOLEAN," + KEY_VEGAN + "BOOLEAN,"
-            + KEY_GLUTEN_FREE + " BOOLEAN," + KEY_DAIRY_FREE + " BOOLEAN," + KEY_CHEAP + " BOOLEAN,"
+            + KEY_GLUTEN_FREE + " BOOLEAN," + KEY_DAIRY_FREE + " BOOLEAN," + KEY_CHEAP + " BOOLEAN"
             + ")";
+
+    //INGREDIENT TABLE create statement
+    private static final String CREATE_TABLE_INGREDIENT = "CREATE TABLE "
+            + TABLE_INGREDIENT + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_NAME + " TEXT," + KEY_AISLE+ " TEXT"
+            + ")";
+
+    //RECIPE_INGREDIENT create statement
+    private static final String CREATE_TABLE_RECIPE_INGREDIENT = "CREATE TABLE "
+            + TABLE_RECIPE_INGREDIENT + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_RECIPE_ID + " INTEGER," + KEY_INGREDIENT_ID + " INTEGER,"
+            + KEY_QUANTITY + " DOUBLE," + KEY_UNITS + " TEXT," + KEY_INGREDIENT_STRING + " TEXT"
+            + ")";
+
+    public DatabaseHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
 
 
     @Override
     public void onCreate(SQLiteDatabase db) {
 
         // creating required tables
-        db.execSQL(CREATE_TABLE_RECIPES);
+        db.execSQL(CREATE_TABLE_RECIPE);
+        db.execSQL(CREATE_TABLE_INGREDIENT);
+        db.execSQL(CREATE_TABLE_RECIPE_INGREDIENT);
 
     }
     @Override
@@ -78,11 +97,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // on upgrade drop older tables
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECIPE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_INGREDIENT);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECIPE_INGREDIENT);
+
+        //create new tables
+        onCreate(db);
 
     }
 
-    public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
+
+
 
 }

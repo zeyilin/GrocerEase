@@ -1,38 +1,43 @@
-import java.util.*;
-
 /**
- * Created by pascalequeralt on 10/16/16.
+ * Created by pascalequeralt on 11/5/16.
  */
 
 public class Ingredient {
 
+    int id;
     String name;
-    double quantity;
-    //enum unitName;
-    String description;
-    int ID;
-    double price;
+    String aisle;
 
+    public Ingredient() {
+    }
 
-    public String getName(){
-        return this.name;
-    };
-    public double getQuantity(){
-        return this.quantity;
-    };
+    public Ingredient(int id, String name, String aisle) {
+        this.id = id;
+        this.name = name;
+        this.aisle = aisle;
+    }
 
-    //public enum getUnit(){};
+    public int getId() {
+        return id;
+    }
 
-    public void convertUnit(){};
-    public String getDescription(){
-        return this.description;
-    };
-    public void changeDescription(){};
-    public int getID(){
-        return this.ID;
-    };
-    public double getPrice(){
-        return this.price;
-    };
+    public void setId(int id) {
+        this.id = id;
+    }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAisle() {
+        return aisle;
+    }
+
+    public void setAisle(String aisle) {
+        this.aisle = aisle;
+    }
 }
