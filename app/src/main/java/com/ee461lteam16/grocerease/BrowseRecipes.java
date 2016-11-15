@@ -21,8 +21,6 @@ import java.util.ArrayList;
 
 public class BrowseRecipes extends AppCompatActivity {
 
-    public final static String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
