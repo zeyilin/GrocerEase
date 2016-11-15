@@ -1,3 +1,5 @@
+package com.ee461lteam16.grocerease;
+
 /**
  * Created by pascalequeralt on 11/5/16.
  */
