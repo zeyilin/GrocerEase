@@ -19,7 +19,7 @@
         </activity>
         <activity android:name=".BrowseRecipes" />
         <activity android:name=".RecipeDetails" />
-        <activity android:name=".Inventory"></activity>
+        <activity android:name=".Inventory" />
     </application>
 
 </manifest>

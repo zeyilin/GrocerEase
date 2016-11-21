@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "870708264715",
+    "firebase_url": "https://fir-grocerease.firebaseio.com",
+    "project_id": "firebase-grocerease",
+    "storage_bucket": "firebase-grocerease.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:870708264715:android:7b519800212d61e5",
+        "android_client_info": {
+          "package_name": "com.ee461lteam16.grocerease"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "870708264715-8lv5i2gebi53jkrr4e0mmp44r1b1grui.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ee461lteam16.grocerease",
+            "certificate_hash": "5F80E09B78DCC0950F10C069CCF2D1E745B49FB1"
+          }
+        },
+        {
+          "client_id": "870708264715-vetdocm417t05t6fcqqncmg5h48imld1.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "870708264715-48kpsd2s6vgkkuduijkl1in7c3sru53p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxRhdh4m8_G3LMk1SkP_F2zlsmiMUC2m0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "870708264715-vetdocm417t05t6fcqqncmg5h48imld1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
