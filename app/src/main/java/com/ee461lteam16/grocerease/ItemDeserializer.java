@@ -28,7 +28,7 @@ public class ItemDeserializer extends StdDeserializer<Recipe> {
 
         JsonNode node = jp.getCodec().readTree(jp);
 
-        int id = (Integer) (node.get("id")).numberValue();
+        long id = (node.get("id")).longValue();
         String title = node.get("title").asText();
         int minutes = (Integer) (node.get("readyInMinutes")).numberValue();
         int servings = (Integer) (node.get("servings")).numberValue();

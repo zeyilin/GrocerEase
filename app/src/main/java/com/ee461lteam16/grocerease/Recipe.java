@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @JsonDeserialize(using = ItemDeserializer.class)
 public class Recipe {
 
-    int id;
+    long id;
     String title;
     int minutes;
     int servings;
@@ -18,18 +18,18 @@ public class Recipe {
     public Recipe() {
     }
 
-    public Recipe(int id, String title, int minutes, int servings) {
+    public Recipe(long id, String title, int minutes, int servings) {
         this.id = id;
         this.title = title;
         this.minutes = minutes;
         this.servings = servings;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -55,5 +55,13 @@ public class Recipe {
 
     public void setServings(int servings) {
         this.servings = servings;
+    }
+
+    public String getReadyInString(){
+        return "Ready in: " + getMinutes() + " min";
+    }
+
+    public String getServingsString(){
+        return "Servings: " + getServings();
     }
 }

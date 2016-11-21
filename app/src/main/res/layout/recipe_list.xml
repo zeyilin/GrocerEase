@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp" >
+
+    <!-- icon -->
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="8dp" />
+
+    <!-- Recipe_title -->
+    <TextView
+        android:id="@+id/Recipe_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/icon"
+        android:layout_toRightOf="@+id/icon"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <!-- Minutes -->
+    <TextView
+        android:id="@+id/minutes"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Recipe_title"
+        android:layout_marginTop="1dip"
+        android:layout_toRightOf="@+id/icon"
+        android:textSize="16sp" />
+
+    <!-- Servings -->
+    <TextView
+        android:id="@+id/servings"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/minutes"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/icon"
+        android:textSize="16sp" />
+
+
+</RelativeLayout>

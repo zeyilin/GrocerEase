@@ -1,10 +1,13 @@
 package com.ee461lteam16.grocerease;
 
+import android.app.ListActivity;
 import android.content.res.AssetManager;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
@@ -19,7 +22,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-public class BrowseRecipes extends AppCompatActivity {
+
+public class BrowseRecipes extends ListActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,17 +34,30 @@ public class BrowseRecipes extends AppCompatActivity {
 
         ArrayList<Recipe> recipeList = getRecipes();
 
-        /*Temporary fix - display titles from recipeList in list view
-        Later, update Listview XML to incorporate servings and minutes*/
-        ArrayList<String> recipeListStr = new ArrayList<String>();
-        for (Recipe r: recipeList) {
-            recipeListStr.add(r.getTitle());
-        }
+        ArrayAdapter<Recipe> adapter =
+                new ArrayAdapter<Recipe>(this, R.layout.recipe_list, R.id.Recipe_title, recipeList) {
 
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, recipeListStr);
+                    // Called to map each data element to a view within the list
+                    @Override
+                    public View getView(int position, View convertView, ViewGroup parent) {
 
-        ListView listView = (ListView) findViewById(R.id.grocery_list);
+                        View view = super.getView(position, convertView, parent);
+                        TextView title = (TextView) view.findViewById(R.id.Recipe_title);
+                        TextView minutes = (TextView) view.findViewById(R.id.minutes);
+                        TextView servings = (TextView) view.findViewById(R.id.servings);
 
+                        final Recipe recipe = (Recipe) this.getItem(position);
+
+                        title.setText(recipe.getTitle());
+                        minutes.setText(recipe.getReadyInString());
+                        servings.setText(recipe.getServingsString());
+
+                        return view;
+                    }
+                };
+
+        // Find the list and attach the ArrayAdapter to it
+        ListView listView = (ListView)findViewById(android.R.id.list);
         listView.setAdapter(adapter);
 
     }
