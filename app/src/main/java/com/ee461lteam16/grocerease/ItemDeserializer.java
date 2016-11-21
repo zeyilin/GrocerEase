@@ -32,8 +32,9 @@ public class ItemDeserializer extends StdDeserializer<Recipe> {
         String title = node.get("title").asText();
         int minutes = (Integer) (node.get("readyInMinutes")).numberValue();
         int servings = (Integer) (node.get("servings")).numberValue();
+        String instructions = node.get("instructions").asText();
 
-        return new Recipe(id, title, minutes, servings);
+        return new Recipe(id, title, minutes, servings, instructions);
 
     }
 

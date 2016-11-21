@@ -1,10 +1,12 @@
 package com.ee461lteam16.grocerease;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import static android.R.id.list;
 
 public class BrowseRecipes extends ListActivity {
 
@@ -32,7 +35,7 @@ public class BrowseRecipes extends ListActivity {
 
         setContentView(R.layout.activity_browse_recipes);
 
-        ArrayList<Recipe> recipeList = getRecipes();
+        final ArrayList<Recipe> recipeList = getRecipes();
 
         ArrayAdapter<Recipe> adapter =
                 new ArrayAdapter<Recipe>(this, R.layout.recipe_list, R.id.Recipe_title, recipeList) {
@@ -57,11 +60,21 @@ public class BrowseRecipes extends ListActivity {
                 };
 
         // Find the list and attach the ArrayAdapter to it
-        ListView listView = (ListView)findViewById(android.R.id.list);
+        ListView listView = (ListView)findViewById(list);
         listView.setAdapter(adapter);
 
-    }
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                Intent intent = new Intent(view.getContext(), RecipeDetails.class);
+                intent.putExtra("currentRecipe", recipeList.get(position));
+                startActivity(intent);
+
+            }
+        });
+
+    }
 
     public ArrayList<Recipe> getRecipes(){
 
@@ -86,7 +99,7 @@ public class BrowseRecipes extends ListActivity {
 
         } catch (JSONException e){
 
-            recipeList.add(new Recipe(-1, "Error loading recipes.", -1, -1));
+            recipeList.add(new Recipe(-1, "Error loading recipes.", -1, -1, ""));
 
         }
 
