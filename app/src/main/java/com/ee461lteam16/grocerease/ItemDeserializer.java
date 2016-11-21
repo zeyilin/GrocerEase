@@ -24,7 +24,7 @@ public class ItemDeserializer extends StdDeserializer<Recipe> {
 
     @Override
     public Recipe deserialize(JsonParser jp, DeserializationContext ctxt)
-            throws IOException, JsonProcessingException {
+            throws IOException {
 
         JsonNode node = jp.getCodec().readTree(jp);
 
