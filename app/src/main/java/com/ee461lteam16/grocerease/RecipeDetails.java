@@ -2,7 +2,6 @@ package com.ee461lteam16.grocerease;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.text.Html;
 import android.widget.TextView;
 
 /**
@@ -24,7 +23,7 @@ public class RecipeDetails extends Activity {
         title.setText(currentRecipe.getTitle());
 
         TextView summary = (TextView) findViewById(R.id.recipeTextSummary);
-        summary.setText(Html.fromHtml(currentRecipe.getInstructions()));
+        summary.setText(currentRecipe.getInstructions());
 
     }
 

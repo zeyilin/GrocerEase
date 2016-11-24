@@ -9,8 +9,6 @@ public class Ingredient {
     int id;
     String name;
     String aisle;
-    String units;
-    int quantity;
 
     public Ingredient() {
     }
@@ -44,12 +42,4 @@ public class Ingredient {
     public void setAisle(String aisle) {
         this.aisle = aisle;
     }
-
-    public String getUnits() { return units;}
-
-    public void setUnits(String units) { this.units = units; }
-
-    public int getQuantity() { return quantity;}
-
-    public void setQuantity(int quantity) { this.quantity = quantity;}
 }

@@ -49,7 +49,7 @@ public class BrowseRecipes extends ListActivity {
                         TextView minutes = (TextView) view.findViewById(R.id.minutes);
                         TextView servings = (TextView) view.findViewById(R.id.servings);
 
-                        final Recipe recipe = this.getItem(position);
+                        final Recipe recipe = (Recipe) this.getItem(position);
 
                         title.setText(recipe.getTitle());
                         minutes.setText(recipe.getReadyInString());
