@@ -21,7 +21,7 @@ public class SplashActivity extends AppCompatActivity {
 
         }
         else {
-            intent = new Intent(this, GoogleSignIn.class);
+            intent = new Intent(this, BrowseRecipes.class);
         }
 
         startActivity(intent);

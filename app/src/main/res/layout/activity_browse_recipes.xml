@@ -4,13 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="vertical">
     tools:context="com.ee461lteam16.grocerease.BrowseRecipes">
-
-    <ListView
-        android:id="@android:id/list"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-    </ListView>
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/status_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Signed Out" />
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/sign_in_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/status_textview" />
+        <Button
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:text="Sign Out"
+            android:id="@+id/signOutButton"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/status_textview" />
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/signOutButton">
+        </ListView>
+    </RelativeLayout>
 
 </LinearLayout>
