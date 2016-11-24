@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.TypeRef;
 import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,13 +50,16 @@ public class BrowseRecipes extends ListActivity {
                         TextView title = (TextView) view.findViewById(R.id.Recipe_title);
                         TextView minutes = (TextView) view.findViewById(R.id.minutes);
                         TextView servings = (TextView) view.findViewById(R.id.servings);
+                        ImageView image = (ImageView) view.findViewById(R.id.Recipe_icon);
 
                         final Recipe recipe = (Recipe) this.getItem(position);
+
 
                         title.setText(recipe.getTitle());
                         minutes.setText(recipe.getReadyInString());
                         servings.setText(recipe.getServingsString());
-
+                        Picasso.with(view.getContext()).load(recipe.getImageURL()).placeholder(view.getContext().getResources().getDrawable(android.R.drawable.star_on)).into(image);
+//placeholder(context.getResources().getDrawable(R.drawable.default_person_image)).error(context.getResources().getDrawable(R.drawable.default_person_image))
                         return view;
                     }
                 };
@@ -99,7 +104,6 @@ public class BrowseRecipes extends ListActivity {
 
         } catch (JSONException e){
 
-            recipeList.add(new Recipe(-1, "Error loading recipes.", -1, -1, ""));
 
         }
 

@@ -2,7 +2,10 @@ package com.ee461lteam16.grocerease;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by pascalequeralt on 11/21/16.
@@ -24,6 +27,9 @@ public class RecipeDetails extends Activity {
 
         TextView summary = (TextView) findViewById(R.id.recipeTextSummary);
         summary.setText(currentRecipe.getInstructions());
+
+        ImageView image = (ImageView) findViewById(R.id.recipeImageView);
+        Picasso.with(this).load(currentRecipe.getImageURL()).into(image);
 
     }
 

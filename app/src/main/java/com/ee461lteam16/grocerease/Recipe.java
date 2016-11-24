@@ -17,6 +17,12 @@ public class Recipe implements Serializable {
     int minutes;
     int servings;
 
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    String imageURL;
+
     public String getInstructions() {
         return instructions;
     }
@@ -26,12 +32,13 @@ public class Recipe implements Serializable {
     public Recipe() {
     }
 
-    public Recipe(long id, String title, int minutes, int servings, String instructions) {
+    public Recipe(long id, String title, int minutes, int servings, String instructions, String imageURL) {
         this.id = id;
         this.title = title;
         this.minutes = minutes;
         this.servings = servings;
         this.instructions = instructions;
+        this.imageURL = imageURL;
     }
 
     public long getId() {
