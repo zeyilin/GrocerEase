@@ -18,22 +18,16 @@ package com.ee461lteam16.grocerease;
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-
-
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.ViewAnimator;
-import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.ViewAnimator;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 
-
-import com.ee461lteam16.grocerease.TabFragment;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple launcher activity containing a summary sample description, sample log and a custom
@@ -45,20 +39,48 @@ import com.ee461lteam16.grocerease.TabFragment;
 public class MainActivity extends FragmentActivity {
 
     public static final String TAG = "MainActivity";
-
-    // Whether the Log Fragment is currently shown
-    private boolean mLogShown;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private List<ContentFragment> mTabs = new ArrayList<ContentFragment>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (savedInstanceState == null) {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            TabFragment fragment = new TabFragment();
-            transaction.replace(R.id.content_fragment, fragment);
-            transaction.commit();
+        viewPager = (ViewPager) findViewById(R.id.view_pager);
+        viewPager.setAdapter(new ContentFragmentPagerAdapter(getSupportFragmentManager()));
+
+        tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
+        // Populate tabs
+        mTabs.add(new BrowseRecipesFragment());
+        mTabs.get(0).setTitle("Recipes");
+
+
+        viewPager.getAdapter().notifyDataSetChanged();
+    }
+
+    private class ContentFragmentPagerAdapter extends FragmentPagerAdapter {
+
+         ContentFragmentPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int i) {
+            return mTabs.get(i);
+        }
+
+        @Override
+        public int getCount() {
+            return mTabs.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mTabs.get(position).getTitle();
         }
     }
 }

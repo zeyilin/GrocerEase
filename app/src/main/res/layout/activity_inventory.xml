@@ -10,7 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.ee461lteam16.grocerease.Inventory">
 
-
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
