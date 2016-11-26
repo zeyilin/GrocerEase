@@ -20,7 +20,6 @@
         </activity>
         <activity android:name=".RecipeDetails" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".Inventory"></activity>
     </application>
 
 </manifest>

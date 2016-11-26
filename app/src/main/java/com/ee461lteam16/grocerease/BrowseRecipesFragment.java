@@ -42,7 +42,7 @@ public class BrowseRecipesFragment extends ContentFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                           Bundle savedInstanceState) {
-        FragmentActivity faActivity  = (FragmentActivity) super.getActivity();
+        FragmentActivity faActivity  = super.getActivity();
         // Replace LinearLayout by the type of the root element of the layout you're trying to load
         LinearLayout llLayout    = (LinearLayout)    inflater.inflate(R.layout.fragment_browse_recipes, container, false);
 

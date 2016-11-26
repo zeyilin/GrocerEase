@@ -57,7 +57,8 @@ public class MainActivity extends FragmentActivity {
         // Populate tabs
         mTabs.add(new BrowseRecipesFragment());
         mTabs.get(0).setTitle("Recipes");
-
+        mTabs.add(new InventoryFragment());
+        mTabs.get(1).setTitle("Inventory");
 
         viewPager.getAdapter().notifyDataSetChanged();
     }
