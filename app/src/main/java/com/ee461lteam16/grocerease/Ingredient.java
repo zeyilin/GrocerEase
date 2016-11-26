@@ -1,30 +1,33 @@
 package com.ee461lteam16.grocerease;
 
+import java.io.Serializable;
+
 /**
  * Created by pascalequeralt on 11/5/16.
  */
 
-public class Ingredient {
+public class Ingredient implements Serializable {
 
-    int id;
+    double amount;
     String name;
-    String aisle;
+    String description;
+    String unit;
+    boolean inInventory;
 
-    public Ingredient() {
-    }
-
-    public Ingredient(int id, String name, String aisle) {
-        this.id = id;
+    public Ingredient(double amount, String name, String description, String unit) {
+        this.amount = amount;
         this.name = name;
-        this.aisle = aisle;
+        this.description = description;
+        this.unit = unit;
+        this.inInventory = false; //fix this later on when comparing recipe ingredients to inventory
     }
 
-    public int getId() {
-        return id;
+    public double getAmount() {
+        return amount;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 
     public String getName() {
@@ -35,11 +38,27 @@ public class Ingredient {
         this.name = name;
     }
 
-    public String getAisle() {
-        return aisle;
+    public String getDescription() {
+        return description;
     }
 
-    public void setAisle(String aisle) {
-        this.aisle = aisle;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public boolean isInInventory() {
+        return inInventory;
+    }
+
+    public void setInInventory(boolean inInventory) {
+        this.inInventory = inInventory;
     }
 }
