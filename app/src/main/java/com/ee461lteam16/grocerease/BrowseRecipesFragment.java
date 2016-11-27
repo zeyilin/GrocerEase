@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -94,6 +97,20 @@ public class BrowseRecipesFragment extends ContentFragment {
 
             }
         });
+
+        EditText myFilter = (EditText) this.getActivity().findViewById(R.id.recipe_search);
+        myFilter.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //dataAdapter.getFilter().filter(s.toString());
+            }
+        } );
     }
 
     public ArrayList<Recipe> getRecipes(){
