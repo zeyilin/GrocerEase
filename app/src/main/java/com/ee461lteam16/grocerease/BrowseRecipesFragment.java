@@ -1,14 +1,18 @@
 package com.ee461lteam16.grocerease;
 
-import android.app.ListActivity;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -26,21 +30,32 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import static android.R.id.list;
 
-public class BrowseRecipes extends ListActivity {
+/**
+ * Created by Chris on 11/25/16.
+ */
+
+public class BrowseRecipesFragment extends ContentFragment {
+
+    public final String TAG = "BrowseRecipesFragment";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                          Bundle savedInstanceState) {
+        FragmentActivity faActivity  = super.getActivity();
+        // Replace LinearLayout by the type of the root element of the layout you're trying to load
+        LinearLayout llLayout    = (LinearLayout)    inflater.inflate(R.layout.fragment_browse_recipes, container, false);
 
-        super.onCreate(savedInstanceState);
+        return llLayout;
+    }
 
-        setContentView(R.layout.activity_browse_recipes);
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
 
         final ArrayList<Recipe> recipeList = getRecipes();
 
         ArrayAdapter<Recipe> adapter =
-                new ArrayAdapter<Recipe>(this, R.layout.recipe_list, R.id.Recipe_title, recipeList) {
+                new ArrayAdapter<Recipe>(this.getContext(), R.layout.recipe_list, R.id.Recipe_title, recipeList) {
 
                     // Called to map each data element to a view within the list
                     @Override
@@ -54,18 +69,19 @@ public class BrowseRecipes extends ListActivity {
 
                         final Recipe recipe = (Recipe) this.getItem(position);
 
-
                         title.setText(recipe.getTitle());
                         minutes.setText(recipe.getReadyInString());
                         servings.setText(recipe.getServingsString());
                         Picasso.with(view.getContext()).load(recipe.getImageURL()).placeholder(view.getContext().getResources().getDrawable(android.R.drawable.star_on)).into(image);
-//placeholder(context.getResources().getDrawable(R.drawable.default_person_image)).error(context.getResources().getDrawable(R.drawable.default_person_image))
                         return view;
                     }
                 };
 
+        Log.d(TAG, "Adapter is: " + adapter.toString());
+
         // Find the list and attach the ArrayAdapter to it
-        ListView listView = (ListView)findViewById(list);
+        Activity myActivity = this.getActivity();
+        ListView listView = (ListView) myActivity.findViewById(R.id.recipe_list_view);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -78,7 +94,6 @@ public class BrowseRecipes extends ListActivity {
 
             }
         });
-
     }
 
     public ArrayList<Recipe> getRecipes(){
@@ -111,7 +126,6 @@ public class BrowseRecipes extends ListActivity {
 
     }
 
-
     public String loadJSONFromAsset() {
         String json = null;
         try {
@@ -129,5 +143,4 @@ public class BrowseRecipes extends ListActivity {
         }
         return json;
     }
-
 }
