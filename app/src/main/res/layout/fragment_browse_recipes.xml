@@ -11,12 +11,14 @@
   android:layout_height="match_parent"
   android:orientation="horizontal">-->
 
-    <EditText android:id="@+id/recipe_search" android:layout_width="match_parent"
-        android:layout_height="wrap_content" android:ems="10"
-        android:hint="@string/search_hint"
-        android:nextFocusUp="@id/recipe_search"
-        android:nextFocusLeft="@id/recipe_search">
-    </EditText>
+    <SearchView
+        android:id="@+id/recipe_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:queryHint="Search.." >
+    </SearchView>
 
     <ListView
         android:id="@+id/recipe_list_view"

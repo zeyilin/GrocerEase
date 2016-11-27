@@ -5,18 +5,16 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
+import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.jayway.jsonpath.Configuration;
@@ -41,6 +39,9 @@ import java.util.ArrayList;
 public class BrowseRecipesFragment extends ContentFragment {
 
     public final String TAG = "BrowseRecipesFragment";
+    public ArrayList<Recipe> recipeList = new ArrayList<>();
+    public ArrayList<Recipe> searchRecipeList = new ArrayList<>();
+    public ArrayAdapter<Recipe> adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,16 +50,19 @@ public class BrowseRecipesFragment extends ContentFragment {
         // Replace LinearLayout by the type of the root element of the layout you're trying to load
         LinearLayout llLayout    = (LinearLayout)    inflater.inflate(R.layout.fragment_browse_recipes, container, false);
 
+        recipeList.addAll(getRecipes());
+        searchRecipeList.addAll(getRecipes());
+
         return llLayout;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        final ArrayList<Recipe> recipeList = getRecipes();
+        //recipeList.addAll(getRecipes());
 
-        ArrayAdapter<Recipe> adapter =
-                new ArrayAdapter<Recipe>(this.getContext(), R.layout.recipe_list, R.id.Recipe_title, recipeList) {
+        adapter =
+                new ArrayAdapter<Recipe>(this.getContext(), R.layout.recipe_list, R.id.Recipe_title, searchRecipeList) {
 
                     // Called to map each data element to a view within the list
                     @Override
@@ -78,9 +82,18 @@ public class BrowseRecipesFragment extends ContentFragment {
                         Picasso.with(view.getContext()).load(recipe.getImageURL()).placeholder(view.getContext().getResources().getDrawable(android.R.drawable.star_on)).into(image);
                         return view;
                     }
-                };
 
-        Log.d(TAG, "Adapter is: " + adapter.toString());
+                    private RecipeSearch recipeSearch;
+                    @Override
+                    public Filter getFilter() {
+                        if (recipeSearch == null) {
+                            recipeSearch = new RecipeSearch();
+                        }
+
+                        return recipeSearch;
+                    }
+
+                };
 
         // Find the list and attach the ArrayAdapter to it
         Activity myActivity = this.getActivity();
@@ -98,19 +111,22 @@ public class BrowseRecipesFragment extends ContentFragment {
             }
         });
 
-        EditText myFilter = (EditText) this.getActivity().findViewById(R.id.recipe_search);
-        myFilter.addTextChangedListener(new TextWatcher() {
+        SearchView search = (SearchView) myActivity.findViewById(R.id.recipe_search);
 
-            public void afterTextChanged(Editable s) {
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String text) {
+                return false;
             }
 
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            @Override
+            public boolean onQueryTextChange(String text) {
 
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //dataAdapter.getFilter().filter(s.toString());
+                adapter.getFilter().filter(text);
+                return false;
             }
-        } );
+        });
+
     }
 
     public ArrayList<Recipe> getRecipes(){
@@ -160,4 +176,53 @@ public class BrowseRecipesFragment extends ContentFragment {
         }
         return json;
     }
+
+    private class RecipeSearch extends Filter {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+
+            System.out.println("TRIES TO FILTER RECIPES");
+
+            FilterResults results = new FilterResults();
+            // We implement here the filter logic
+            if (constraint == null || constraint.length() == 0) {
+                // No filter implemented we return all the list
+                results.values = recipeList;
+                results.count = recipeList.size();
+            }
+            else {
+                // We perform filtering operation
+                ArrayList<Recipe> newRecipeList = new ArrayList<Recipe>();
+
+                ArrayList<Recipe> fullrecipeList = getRecipes();
+                for (Recipe r : fullrecipeList){
+                    if (r.getTitle().toUpperCase().contains(constraint.toString().toUpperCase())){
+                        newRecipeList.add(r);
+                    }
+                }
+
+                results.values = newRecipeList;
+                //System.out.println(newRecipeList);
+                results.count = newRecipeList.size();
+
+            }
+            return results;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void publishResults(CharSequence constraint,FilterResults results) {
+            // Now we have to inform the adapter about the new list filtered
+            searchRecipeList.clear();
+            searchRecipeList.addAll((ArrayList<Recipe>) results.values);
+            System.out.println(searchRecipeList);
+            adapter.notifyDataSetChanged();
+
+        }
+    }
+
+
+
 }
+
+
