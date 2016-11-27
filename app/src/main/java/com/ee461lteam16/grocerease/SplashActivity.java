@@ -12,22 +12,19 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent;
-        SharedPreferences grocereasePrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean isLoggedIn = grocereasePrefs.getBoolean("isLoggedIn", false);
-
-        if (isLoggedIn) {
-            intent  = new Intent(this, BrowseRecipes.class);
-
-        }
-        else {
-            intent = new Intent(this, BrowseRecipes.class);
-        }
-
-<<<<<<< HEAD
-=======
+//        Intent intent;
+//        SharedPreferences grocereasePrefs = PreferenceManager.getDefaultSharedPreferences(this);
+//        boolean isLoggedIn = grocereasePrefs.getBoolean("isLoggedIn", false);
+//
+//        if (isLoggedIn) {
+//            intent  = new Intent(this, BrowseRecipes.class);
+//
+//        }
+//        else {
+//            intent = new Intent(this, BrowseRecipes.class);
+//        }
+//
         Intent intent = new Intent(this, MainActivity.class);
->>>>>>> master
         startActivity(intent);
         finish();
     }

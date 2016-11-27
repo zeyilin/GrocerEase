@@ -1,7 +1,6 @@
 package com.ee461lteam16.grocerease;
 
 import android.support.v4.app.Fragment;
-
 /**
  * Created by Chris on 11/25/16.
  */

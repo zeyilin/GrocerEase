@@ -1,6 +1,5 @@
 package com.ee461lteam16.grocerease;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
@@ -88,7 +86,7 @@ public class GoogleSignIn extends AppCompatActivity implements GoogleApiClient.O
             // Signed in successfully, move to browse recipes
             isLoggedIn = true;
             grocereasePrefs.edit().putBoolean("isLoggedIn", isLoggedIn).commit();
-            Intent intent = new Intent(this, BrowseRecipes.class);
+            Intent intent = new Intent(this, SettingsFragment.class);
             startActivity(intent);
             finish();
         } else {
