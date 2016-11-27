@@ -24,6 +24,10 @@ public class SplashActivity extends AppCompatActivity {
             intent = new Intent(this, BrowseRecipes.class);
         }
 
+<<<<<<< HEAD
+=======
+        Intent intent = new Intent(this, MainActivity.class);
+>>>>>>> master
         startActivity(intent);
         finish();
     }

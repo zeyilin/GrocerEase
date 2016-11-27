@@ -5850,7 +5850,7 @@
             "image": "https://spoonacular.com/cdn/ingredients_100x100/salt.jpg",
             "metaInformation": [],
             "name": "salt",
-            "originalString": "of salt",
+            "originalString": "12 servings of salt",
             "unit": "servings",
             "unitLong": "servings",
             "unitShort": "servings"
@@ -49397,7 +49397,7 @@
         "cheap": false,
         "creditText": "Lisa's Vegetarian Kitchen",
         "cuisines": [
-          "middl eastern"
+          "middle eastern"
         ],
         "dairyFree": true,
         "extendedIngredients": [

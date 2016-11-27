@@ -18,11 +18,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<<<<<<< HEAD
         <activity android:name=".GoogleSignIn" />
         <activity android:name=".BrowseRecipes" />
         <activity android:name=".RecipeDetails" />
         <activity android:name=".Inventory" />
         <activity android:name=".GoogleSignIn"></activity>
+=======
+        <activity android:name=".RecipeDetails" />
+        <activity android:name=".MainActivity" />
+>>>>>>> master
     </application>
 
 </manifest>
+

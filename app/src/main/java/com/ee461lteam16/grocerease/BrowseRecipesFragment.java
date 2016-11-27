@@ -1,14 +1,28 @@
 package com.ee461lteam16.grocerease;
 
+<<<<<<< HEAD:app/src/main/java/com/ee461lteam16/grocerease/BrowseRecipes.java
+=======
+import android.app.Activity;
+>>>>>>> master:app/src/main/java/com/ee461lteam16/grocerease/BrowseRecipesFragment.java
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+<<<<<<< HEAD:app/src/main/java/com/ee461lteam16/grocerease/BrowseRecipes.java
 import android.widget.Button;
+=======
+import android.widget.EditText;
+>>>>>>> master:app/src/main/java/com/ee461lteam16/grocerease/BrowseRecipesFragment.java
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -42,8 +56,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import static android.R.id.list;
 
+<<<<<<< HEAD:app/src/main/java/com/ee461lteam16/grocerease/BrowseRecipes.java
 public class BrowseRecipes extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
     SignInButton signInButton;
     Button signOutButton;
@@ -53,18 +67,33 @@ public class BrowseRecipes extends AppCompatActivity implements GoogleApiClient.
     private static final int RC_SIGN_IN = 9001;
     private SharedPreferences grocereasePrefs;
     private static boolean isLoggedIn = false;
+=======
+/**
+ * Created by Chris on 11/25/16.
+ */
+
+public class BrowseRecipesFragment extends ContentFragment {
+
+    public final String TAG = "BrowseRecipesFragment";
+>>>>>>> master:app/src/main/java/com/ee461lteam16/grocerease/BrowseRecipesFragment.java
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                          Bundle savedInstanceState) {
+        FragmentActivity faActivity  = super.getActivity();
+        // Replace LinearLayout by the type of the root element of the layout you're trying to load
+        LinearLayout llLayout    = (LinearLayout)    inflater.inflate(R.layout.fragment_browse_recipes, container, false);
 
-        super.onCreate(savedInstanceState);
+        return llLayout;
+    }
 
-        setContentView(R.layout.activity_browse_recipes);
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
 
         final ArrayList<Recipe> recipeList = getRecipes();
 
         ArrayAdapter<Recipe> adapter =
-                new ArrayAdapter<Recipe>(this, R.layout.recipe_list, R.id.Recipe_title, recipeList) {
+                new ArrayAdapter<Recipe>(this.getContext(), R.layout.recipe_list, R.id.Recipe_title, recipeList) {
 
                     // Called to map each data element to a view within the list
                     @Override
@@ -78,18 +107,19 @@ public class BrowseRecipes extends AppCompatActivity implements GoogleApiClient.
 
                         final Recipe recipe = (Recipe) this.getItem(position);
 
-
                         title.setText(recipe.getTitle());
                         minutes.setText(recipe.getReadyInString());
                         servings.setText(recipe.getServingsString());
                         Picasso.with(view.getContext()).load(recipe.getImageURL()).placeholder(view.getContext().getResources().getDrawable(android.R.drawable.star_on)).into(image);
-//placeholder(context.getResources().getDrawable(R.drawable.default_person_image)).error(context.getResources().getDrawable(R.drawable.default_person_image))
                         return view;
                     }
                 };
 
+        Log.d(TAG, "Adapter is: " + adapter.toString());
+
         // Find the list and attach the ArrayAdapter to it
-        ListView listView = (ListView)findViewById(list);
+        Activity myActivity = this.getActivity();
+        ListView listView = (ListView) myActivity.findViewById(R.id.recipe_list_view);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -103,6 +133,7 @@ public class BrowseRecipes extends AppCompatActivity implements GoogleApiClient.
             }
         });
 
+<<<<<<< HEAD:app/src/main/java/com/ee461lteam16/grocerease/BrowseRecipes.java
         //TEST CODE
 //        super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_google_signin);
@@ -123,6 +154,21 @@ public class BrowseRecipes extends AppCompatActivity implements GoogleApiClient.
         signOutButton = (Button) findViewById(R.id.signOutButton);
         signOutButton.setOnClickListener(this);
 
+=======
+        EditText myFilter = (EditText) this.getActivity().findViewById(R.id.recipe_search);
+        myFilter.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //dataAdapter.getFilter().filter(s.toString());
+            }
+        } );
+>>>>>>> master:app/src/main/java/com/ee461lteam16/grocerease/BrowseRecipesFragment.java
     }
 
     public ArrayList<Recipe> getRecipes(){
@@ -155,7 +201,6 @@ public class BrowseRecipes extends AppCompatActivity implements GoogleApiClient.
 
     }
 
-
     public String loadJSONFromAsset() {
         String json = null;
         try {
@@ -173,6 +218,7 @@ public class BrowseRecipes extends AppCompatActivity implements GoogleApiClient.
         }
         return json;
     }
+<<<<<<< HEAD:app/src/main/java/com/ee461lteam16/grocerease/BrowseRecipes.java
 
     //TEST CODE BELOW
     @Override
@@ -234,3 +280,6 @@ public class BrowseRecipes extends AppCompatActivity implements GoogleApiClient.
         });
     }
 }
+=======
+}
+>>>>>>> master:app/src/main/java/com/ee461lteam16/grocerease/BrowseRecipesFragment.java
