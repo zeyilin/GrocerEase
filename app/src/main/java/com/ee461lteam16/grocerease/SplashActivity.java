@@ -16,11 +16,11 @@ public class SplashActivity extends AppCompatActivity {
         boolean isLoggedIn = grocereasePrefs.getBoolean("isLoggedIn", false);
 
         if (isLoggedIn) {
-            intent  = new Intent(this, BrowseRecipes.class);
+            intent  = new Intent(this, MainActivity.class);
 
         }
         else {
-            intent = new Intent(this, BrowseRecipes.class);
+            intent = new Intent(this, MainActivity.class);
         }
 
         //Intent intent = new Intent(this, MainActivity.class);

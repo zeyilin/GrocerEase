@@ -5,14 +5,14 @@ package com.ee461lteam16.grocerease;
  */
 
 import android.content.Context;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
-import android.widget.ListAdapter;
 import android.widget.Button;
+import android.widget.ListAdapter;
+import android.widget.TextView;
+
 import java.util.ArrayList;
 
 public class InventoryItemAdapter extends BaseAdapter implements ListAdapter {
@@ -56,14 +56,14 @@ public class InventoryItemAdapter extends BaseAdapter implements ListAdapter {
         //Handle buttons and add onClickListeners
         Button deleteBtn = (Button)view.findViewById(R.id.delete_btn);
 
-       deleteBtn.setOnClickListener(new View.OnClickListener(){
+      /* deleteBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 //do something
-                Inventory.remove(position); //or some other task
+                //Inventory.remove(position); //or some other task
                 notifyDataSetChanged();
             }
-        });
+        });*/
 
         return view;
     }
