@@ -30,6 +30,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -42,6 +43,7 @@ public class BrowseRecipesFragment extends ContentFragment {
     public ArrayList<Recipe> recipeList = new ArrayList<>();
     public ArrayList<Recipe> searchRecipeList = new ArrayList<>();
     public ArrayAdapter<Recipe> adapter;
+    public FilterRecipes filterRecipes;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -127,7 +129,32 @@ public class BrowseRecipesFragment extends ContentFragment {
             }
         });
 
+        MultiSpinner multiSpinner = (MultiSpinner) myActivity.findViewById(R.id.multi_spinner_filter);
+
+        filterRecipes = new FilterRecipes();
+        List<String> items = filterRecipes.getFilterItems();
+
+        multiSpinner.setItems(items, getString(R.string.for_all), onSelectedListener);
+
     }
+
+    private MultiSpinner.MultiSpinnerListener onSelectedListener = new MultiSpinner.MultiSpinnerListener() {
+        public void onItemsSelected(boolean[] selected) {
+
+            String query = filterRecipes.getQueryString(selected);
+            System.out.println(query);
+
+            ArrayList<Recipe> filteredRecipes = getFilteredRecipes(query);
+
+            recipeList.clear();
+            recipeList.addAll(filteredRecipes);
+
+            searchRecipeList.clear();
+            searchRecipeList.addAll(filteredRecipes);
+
+            adapter.notifyDataSetChanged();
+        }
+    };
 
     public ArrayList<Recipe> getRecipes(){
 
@@ -149,6 +176,41 @@ public class BrowseRecipesFragment extends ContentFragment {
                     .using(conf)
                     .parse(jsonStr)
                     .read("$.recipes[*][*]", type);
+
+        } catch (JSONException e){
+
+
+        }
+
+        return recipeList;
+
+    }
+
+    public ArrayList<Recipe> getFilteredRecipes(String query){
+
+        ArrayList<Recipe> recipeList = new ArrayList<Recipe>();
+
+        try{
+            JSONObject json = new JSONObject(loadJSONFromAsset());
+            String jsonStr = json.toString();
+
+            Object dataObject = JsonPath.parse(jsonStr).read("$.recipes[*][?(@.glutenFree == false)]");
+            String test = dataObject.toString();
+
+            System.out.println(test.substring(0, 1000));
+
+            Configuration conf = Configuration.builder()
+                    .mappingProvider(new JacksonMappingProvider())
+                    .jsonProvider(new JacksonJsonProvider())
+                    .build();
+
+            TypeRef<ArrayList<Recipe>> type = new TypeRef<ArrayList<Recipe>>(){};
+
+            //On first load, display all recipes (no filters applied)
+            recipeList = JsonPath
+                    .using(conf)
+                    .parse(jsonStr)
+                    .read("$.recipes[*][" + query + "]", type);
 
         } catch (JSONException e){
 
@@ -194,8 +256,7 @@ public class BrowseRecipesFragment extends ContentFragment {
                 // We perform filtering operation
                 ArrayList<Recipe> newRecipeList = new ArrayList<Recipe>();
 
-                ArrayList<Recipe> fullrecipeList = getRecipes();
-                for (Recipe r : fullrecipeList){
+                for (Recipe r : recipeList){
                     if (r.getTitle().toUpperCase().contains(constraint.toString().toUpperCase())){
                         newRecipeList.add(r);
                     }
