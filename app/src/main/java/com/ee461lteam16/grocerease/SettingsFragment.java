@@ -5,15 +5,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,7 +42,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.InputStream;
-import java.net.URL;
+
 /**
  * Created by ZeyiLin on 11/26/16.
  */
@@ -63,7 +59,7 @@ public class SettingsFragment extends ContentFragment implements GoogleApiClient
     private GoogleApiClient mGoogleApiClient;
     private SignInButton signInButton;
     private Button signOutButton;
-    private Button disconnectButton;
+//    private Button disconnectButton;
     private LinearLayout signOutView;
     private TextView mStatusTextView;
     private ProgressDialog mProgressDialog;
@@ -84,7 +80,8 @@ public class SettingsFragment extends ContentFragment implements GoogleApiClient
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        grocereasePrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        grocereasePrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -140,11 +137,11 @@ public class SettingsFragment extends ContentFragment implements GoogleApiClient
             // If the user has not previously signed in on this device or the sign-in has expired,
             // this asynchronous branch will attempt to sign in the user silently.  Cross-device
             // single sign-on will occur in this branch.
-            showProgressDialog();
+//            showProgressDialog();
             opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
                 @Override
                 public void onResult(GoogleSignInResult googleSignInResult) {
-                    hideProgressDialog();
+//                    hideProgressDialog();
                     handleSignInResult(googleSignInResult);
                 }
             });
@@ -166,11 +163,11 @@ public class SettingsFragment extends ContentFragment implements GoogleApiClient
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_google_signin, parent, false);
+        View v = inflater.inflate(R.layout.fragment_settings, parent, false);
 
         signInButton = (SignInButton) v.findViewById(R.id.sign_in_button);
         signOutButton = (Button) v.findViewById(R.id.sign_out_button);
-        disconnectButton = (Button) v.findViewById(R.id.disconnect_button);
+//        disconnectButton = (Button) v.findViewById(R.id.disconnect_button);
         imgProfilePic = (ImageView) v.findViewById(R.id.img_profile_pic);
 
         mStatusTextView = (TextView) v.findViewById(R.id.status);
@@ -200,19 +197,8 @@ public class SettingsFragment extends ContentFragment implements GoogleApiClient
 
         });
 
-        disconnectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Google revoke access
-                Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
-                        new ResultCallback<Status>() {
-                            @Override
-                            public void onResult(@NonNull Status status) {
-                                updateUI(false);
-                            }
-                        });
-            }
-        });
+//
+
 
         return v;
     }
@@ -240,6 +226,7 @@ public class SettingsFragment extends ContentFragment implements GoogleApiClient
             // Signed in successfully, show authenticated UI.
             isLoggedIn = true;
             grocereasePrefs.edit().putBoolean("isLoggedIn", isLoggedIn).commit();
+
             GoogleSignInAccount acct = result.getSignInAccount();
             firebaseAuthWithGoogle(acct);
             mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
@@ -269,7 +256,7 @@ public class SettingsFragment extends ContentFragment implements GoogleApiClient
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         // [START_EXCLUDE silent]
-        showProgressDialog();
+//        showProgressDialog();
         // [END_EXCLUDE]
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -288,7 +275,7 @@ public class SettingsFragment extends ContentFragment implements GoogleApiClient
                                     Toast.LENGTH_SHORT).show();
                         }
                         // [START_EXCLUDE]
-                        hideProgressDialog();
+//                        hideProgressDialog();
                         // [END_EXCLUDE]
                     }
                 });
@@ -300,11 +287,10 @@ public class SettingsFragment extends ContentFragment implements GoogleApiClient
             signInButton.setVisibility(View.GONE);
             signOutButton.setVisibility(View.VISIBLE);
         } else {
-            mStatusTextView.setText(R.string.signed_out);
-            Bitmap icon = BitmapFactory.decodeResource(getContext().getResources(),R.drawable.user_default);
-            imgProfilePic.setImageBitmap(ImageHelper.getRoundedCornerBitmap(getContext(),icon, 200, 200, 200, false, false, false, false));
-            signInButton.setVisibility(View.VISIBLE);
-            signOutButton.setVisibility(View.GONE);
+            mAuth.signOut();
+            Auth.GoogleSignInApi.signOut(mGoogleApiClient);
+            startActivity(new Intent(getContext(), GoogleSignInActivity.class));
+            getActivity().finish();
         }
     }
 
