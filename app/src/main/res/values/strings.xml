@@ -51,4 +51,6 @@
          from https://console.developers.google.com/ -->
     <string name="server_client_id">YOUR_SERVER_CLIENT_ID</string>
     <string name="name">Name :</string>
+    <string name="filter_recipe_title">Filter Recipes</string>
+    <string name="for_all">Advanced</string>
 </resources>

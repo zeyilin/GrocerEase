@@ -32,6 +32,8 @@ public class Recipe implements Serializable {
 
     List<Ingredient> ingredientList;
 
+    boolean favorited;
+
     public Recipe(long id, String title, int minutes, int servings, String instructions, String imageURL, boolean cheap, boolean dairyFree, boolean glutenFree, boolean vegan, boolean vegetarian, boolean veryHealthy, boolean veryPopular, List<String> cuisines, List<Ingredient> ingredientList) {
         this.id = id;
         this.title = title;
