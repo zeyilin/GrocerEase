@@ -42,6 +42,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -247,6 +249,14 @@ public class SettingsFragment extends ContentFragment implements GoogleApiClient
                 new LoadProfileImage(imgProfilePic).execute(acct.getPhotoUrl().toString());
 
             updateUI(true);
+
+            // TEST WRITE TO FIREBASE REAL TIME DATABASE
+            // Write a message to the database
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference myRef = database.getReference("message");
+
+            myRef.setValue("Hello, World!");
+
         } else {
             // Signed out, show unauthenticated UI.
             updateUI(false);
