@@ -11,6 +11,7 @@ public class Ingredient implements Serializable, Comparable<Ingredient> {
     double amount;
     String name;
     String description;
+    String amountInUnits;
     String unit;
     boolean inInventory;
 
@@ -22,8 +23,8 @@ public class Ingredient implements Serializable, Comparable<Ingredient> {
         this.inInventory = false; //fix this later on when comparing recipe ingredients to inventory
     }
 
-    public Ingredient(double amount, String name){
-        this.amount = amount;
+    public Ingredient(String amountInUnits, String name){
+        this.amountInUnits = amountInUnits;
         this.name = name;
         // REFERENCE INGREDIENT DATABASE TO FIND UNITS OF COMMON INGREDIENTS
     }
@@ -60,6 +61,8 @@ public class Ingredient implements Serializable, Comparable<Ingredient> {
         this.unit = unit;
     }
 
+    public String getAmountInUnits() { return amountInUnits; }
+
     public boolean isInInventory() {
         return inInventory;
     }
@@ -71,5 +74,10 @@ public class Ingredient implements Serializable, Comparable<Ingredient> {
     public int compareTo(Ingredient other){
 
         return this.name.compareToIgnoreCase(other.name);
+    }
+
+    @Override
+    public String toString() {
+        return amountInUnits + " " + name;
     }
 }

@@ -29,9 +29,9 @@ public class InventoryFragment extends ContentFragment {
     ArrayList<Ingredient> shoppingList = new ArrayList<>();
     ArrayAdapter adapter = null;
     ListView lv = null;
-    Ingredient ingred_1 = new Ingredient(12, "Eggs", "", "dozen");
-    Ingredient ingred_2 = new Ingredient(2, "Milk", "", "gallons");
-    Ingredient ingred_3 = new Ingredient(6, "Turkey", "", "lbs");
+    Ingredient ingred_1 = new Ingredient("12 dozen", "eggs");
+    Ingredient ingred_2 = new Ingredient("2 gallons", "milk");
+    Ingredient ingred_3 = new Ingredient("6 lbs", "turkey");
     Ingredient temp_ingred;
     String temp_ingred_name;
     String temp_ingred_quantity;
@@ -52,7 +52,7 @@ public class InventoryFragment extends ContentFragment {
         shoppingList.add(ingred_3);
 
         Collections.sort(shoppingList);
-        final ListAdapter adapter = new InventoryItemAdapter(shoppingList, myContext);
+        final ListAdapter adapter = new ArrayAdapter<>(myContext, android.R.layout.simple_list_item_1, shoppingList);
         lv = (ListView) this.getView().findViewById(R.id.listView);
         lv.setAdapter(adapter);
 
@@ -72,13 +72,12 @@ public class InventoryFragment extends ContentFragment {
                         AlertDialog.Builder quantityAlert = new AlertDialog.Builder(myContext);
                         quantityAlert.setTitle("How many?");
                         final EditText quantityInput = new EditText(myContext);
-                        quantityInput.setInputType(InputType.TYPE_CLASS_NUMBER);
                         quantityAlert.setView(quantityInput);
                         quantityAlert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                temp_ingred_quantity = input.getText().toString();
-                                temp_ingred = new Ingredient(Integer.parseInt(temp_ingred_quantity), temp_ingred_name);
+                                temp_ingred_quantity = quantityInput.getText().toString();
+                                temp_ingred = new Ingredient(temp_ingred_quantity, temp_ingred_name);
                                 shoppingList.add(temp_ingred);
                                 Collections.sort(shoppingList);
                                 lv.setAdapter(adapter);
@@ -113,6 +112,14 @@ public class InventoryFragment extends ContentFragment {
             return original;
 
         return original.substring(0, 1).toUpperCase() + original.substring(1).toLowerCase();
+    }
+
+    public ArrayList<Ingredient> getInventory(){
+        return shoppingList;
+    }
+
+    public Ingredient getInventoryItem(int index){
+        return shoppingList.get(index);
     }
 
 }
