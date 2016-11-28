@@ -50,10 +50,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/sign_out"
+            android:layout_below="@id/sign_in_button"
             android:theme="@style/ThemeOverlay.MyDarkButton"
             android:visibility="visible"
             tools:visibility="gone"/>
 
+
+        <Button
+            android:id="@+id/disconnect_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Disconnect"
+            android:layout_below="@id/sign_in_button"
+            android:theme="@style/ThemeOverlay.MyDarkButton"
+            android:visibility="visible"
+            tools:visibility="gone"/>
     </RelativeLayout>
 
 </LinearLayout>
