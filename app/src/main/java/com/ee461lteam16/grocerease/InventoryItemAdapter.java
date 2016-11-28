@@ -41,17 +41,37 @@ public class InventoryItemAdapter extends BaseAdapter implements ListAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        View view = convertView;
+
+        View view = getView(position, convertView, parent);
+        TextView title = (TextView) view.findViewById(R.id.text1);
+        Button deleteButton = (Button) view.findViewById(R.id.delete_btn);
+
+        final Ingredient item = (Ingredient) this.getItem(position);
+
+        title.setText(item.getName());
+        deleteButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Inventory.remove(position);
+                notifyDataSetChanged();
+            }
+        });
+        return view;
+
+
+
+        /*View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.fragment_inventory, null);
+            view = inflater.inflate(R.layout.inventory_item, null);
         }
 
         //Handle TextView and display string from your list
-        TextView listItemText = (TextView)view.findViewById(R.id.text1);
+        TextView listItemText = (TextView) view.findViewById(R.id.text1);
+        System.out.println(listItemText);
 
         Ingredient item = (Ingredient) getItem(position);
-        listItemText.setText(item.toString());
+        //listItemText.setText("Test");
 
         //Handle buttons and add onClickListeners
         Button deleteBtn = (Button)view.findViewById(R.id.delete_btn);
@@ -65,6 +85,5 @@ public class InventoryItemAdapter extends BaseAdapter implements ListAdapter {
             }
         });*/
 
-        return view;
     }
 }
