@@ -41,7 +41,6 @@ public class InventoryItemAdapter extends BaseAdapter implements ListAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-
         View view = getView(position, convertView, parent);
         TextView title = (TextView) view.findViewById(R.id.text1);
         Button deleteButton = (Button) view.findViewById(R.id.delete_btn);
