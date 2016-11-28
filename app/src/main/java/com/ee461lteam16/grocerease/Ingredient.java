@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by pascalequeralt on 11/5/16.
  */
 
-public class Ingredient implements Serializable {
+public class Ingredient implements Serializable, Comparable<Ingredient> {
 
     double amount;
     String name;
@@ -20,6 +20,12 @@ public class Ingredient implements Serializable {
         this.description = description;
         this.unit = unit;
         this.inInventory = false; //fix this later on when comparing recipe ingredients to inventory
+    }
+
+    public Ingredient(double amount, String name){
+        this.amount = amount;
+        this.name = name;
+        // REFERENCE INGREDIENT DATABASE TO FIND UNITS OF COMMON INGREDIENTS
     }
 
     public double getAmount() {
@@ -60,5 +66,10 @@ public class Ingredient implements Serializable {
 
     public void setInInventory(boolean inInventory) {
         this.inInventory = inInventory;
+    }
+
+    public int compareTo(Ingredient other){
+
+        return this.name.compareToIgnoreCase(other.name);
     }
 }
