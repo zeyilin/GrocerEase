@@ -7,10 +7,6 @@
     android:focusableInTouchMode="true"
     android:focusable="true" >
 
-    <!--android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="horizontal">-->
-
     <SearchView
         android:id="@+id/recipe_search"
         android:layout_width="match_parent"
@@ -19,6 +15,16 @@
         android:layout_alignParentTop="true"
         android:queryHint="Search.." >
     </SearchView>
+
+    <EditText android:id="@+id/edit_recipe_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/search_hint"
+        android:nextFocusUp="@id/recipe_search"
+        android:nextFocusLeft="@id/recipe_search">
+        android:layout_below="@id/signOutButton" />
+    </EditText>
 
     <ListView
         android:id="@+id/recipe_list_view"

@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-
 /**
  * Created by Chris on 11/25/16.
  */
@@ -46,7 +45,6 @@ public class BrowseRecipesFragment extends ContentFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                           Bundle savedInstanceState) {
-        FragmentActivity faActivity  = super.getActivity();
         // Replace LinearLayout by the type of the root element of the layout you're trying to load
         LinearLayout llLayout    = (LinearLayout)    inflater.inflate(R.layout.fragment_browse_recipes, container, false);
 
