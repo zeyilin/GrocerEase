@@ -250,6 +250,12 @@ public class SettingsFragment extends ContentFragment implements GoogleApiClient
 
             updateUI(true);
 
+        } else {
+            // Signed out, show unauthenticated UI.
+            updateUI(false);
+            isLoggedIn = false;
+            grocereasePrefs.edit().putBoolean("isLoggedIn", isLoggedIn).commit();
+
             // TEST WRITE TO FIREBASE REAL TIME DATABASE
             // Write a message to the database
             FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -257,12 +263,8 @@ public class SettingsFragment extends ContentFragment implements GoogleApiClient
 
             myRef.setValue("Hello, World!");
 
-        } else {
-            // Signed out, show unauthenticated UI.
-            updateUI(false);
-            isLoggedIn = false;
-            grocereasePrefs.edit().putBoolean("isLoggedIn", isLoggedIn).commit();
-        }
+            // TODO - save favorited recipes, ingredients saved
+            // access database with UserID+FavoriteRecipes, Inventory, GroceryList
     }
 
     // [START auth_with_google]
