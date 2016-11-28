@@ -4,8 +4,6 @@ package com.ee461lteam16.grocerease;
  * Created by kassiknight on 11/27/16.
  */
 
-import java.util.List;
-
 import android.content.Context;
 
 import android.view.LayoutInflater;
@@ -52,7 +50,8 @@ public class InventoryItemAdapter extends BaseAdapter implements ListAdapter {
         //Handle TextView and display string from your list
         TextView listItemText = (TextView)view.findViewById(R.id.text1);
 
-        //listItemText.setText(Inventory.get(position).getName());
+        Ingredient item = (Ingredient) getItem(position);
+        listItemText.setText(item.toString());
 
         //Handle buttons and add onClickListeners
         Button deleteBtn = (Button)view.findViewById(R.id.delete_btn);
