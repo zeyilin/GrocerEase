@@ -52,19 +52,19 @@ public class InventoryItemAdapter extends BaseAdapter implements ListAdapter {
         //Handle TextView and display string from your list
         TextView listItemText = (TextView)view.findViewById(R.id.text1);
 
-        //listItemText.setText(Inventory.get(position));
+        //listItemText.setText(Inventory.get(position).getName());
 
         //Handle buttons and add onClickListeners
         Button deleteBtn = (Button)view.findViewById(R.id.delete_btn);
 
-       /* deleteBtn.setOnClickListener(new View.OnClickListener(){
+       deleteBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 //do something
                 Inventory.remove(position); //or some other task
                 notifyDataSetChanged();
             }
-        });*/
+        });
 
         return view;
     }
