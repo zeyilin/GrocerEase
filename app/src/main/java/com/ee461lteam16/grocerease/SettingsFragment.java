@@ -166,7 +166,7 @@ public class SettingsFragment extends ContentFragment implements GoogleApiClient
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_google_signin, parent, false);
+        View v = inflater.inflate(R.layout.fragment_settings, parent, false);
 
         signInButton = (SignInButton) v.findViewById(R.id.sign_in_button);
         signOutButton = (Button) v.findViewById(R.id.sign_out_button);

@@ -53,6 +53,54 @@
           "status": 2
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:870708264715:android:ccb46e4eb656daac",
+        "android_client_info": {
+          "package_name": "com.ee461lteam.grocerease"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "870708264715-l5h1hjn7vvc9qctthsc4sb6akk4nit32.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ee461lteam.grocerease",
+            "certificate_hash": "5EB6570D09CEA670DA08AAC6FC63D9A437BB1B92"
+          }
+        },
+        {
+          "client_id": "870708264715-vetdocm417t05t6fcqqncmg5h48imld1.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "870708264715-48kpsd2s6vgkkuduijkl1in7c3sru53p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxRhdh4m8_G3LMk1SkP_F2zlsmiMUC2m0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "870708264715-vetdocm417t05t6fcqqncmg5h48imld1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
     }
   ],
   "configuration_version": "1"
