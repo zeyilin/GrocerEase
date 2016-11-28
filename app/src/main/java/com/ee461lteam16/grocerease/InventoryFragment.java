@@ -1,28 +1,22 @@
 package com.ee461lteam16.grocerease;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.ListAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 
 
 /**
@@ -32,9 +26,15 @@ import java.util.Set;
 public class InventoryFragment extends ContentFragment {
 
     public final String TAG = "InventoryFragment";
-    ArrayList<String> shoppingList = null;
-    ArrayAdapter<String> adapter = null;
+    ArrayList<Ingredient> shoppingList = new ArrayList<>();
+    ArrayAdapter adapter = null;
     ListView lv = null;
+    Ingredient ingred_1 = new Ingredient("12 dozen", "eggs");
+    Ingredient ingred_2 = new Ingredient("2 gallons", "milk");
+    Ingredient ingred_3 = new Ingredient("6 lbs", "turkey");
+    Ingredient temp_ingred;
+    String temp_ingred_name;
+    String temp_ingred_quantity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,24 +47,17 @@ public class InventoryFragment extends ContentFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         final Context myContext = this.getContext();
-        shoppingList = getArrayVal(myContext);
+        shoppingList.add(ingred_1);
+        shoppingList.add(ingred_2);
+        shoppingList.add(ingred_3);
+
         Collections.sort(shoppingList);
-        adapter = new ArrayAdapter(this.getActivity(), android.R.layout.simple_list_item_multiple_choice, shoppingList);
+        final ListAdapter adapter = new ArrayAdapter<>(myContext, android.R.layout.simple_list_item_1, shoppingList);
         lv = (ListView) this.getView().findViewById(R.id.listView);
         lv.setAdapter(adapter);
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView parent, View view, final int position, long id) {
-                String selectedItem = ((TextView) view).getText().toString();
-                if (selectedItem.trim().equals(shoppingList.get(position).trim())) {
-                    removeElement(selectedItem, position);
-                } else {
-                    Toast.makeText(myContext,"Error Removing Element", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
 
-        FloatingActionButton myFab = (FloatingActionButton) view.findViewById(R.id.add_to_inventory);
-        myFab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton addButton = (FloatingActionButton) view.findViewById(R.id.add_to_inventory);
+        addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(myContext);
                 builder.setTitle("Add Item");
@@ -73,10 +66,34 @@ public class InventoryFragment extends ContentFragment {
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        shoppingList.add(preferredCase(input.getText().toString()));
-                        Collections.sort(shoppingList);
-                        storeArrayVal(shoppingList, myContext);
-                        lv.setAdapter(adapter);
+
+                        temp_ingred_name = preferredCase(input.getText().toString());
+
+                        AlertDialog.Builder quantityAlert = new AlertDialog.Builder(myContext);
+                        quantityAlert.setTitle("How many?");
+                        final EditText quantityInput = new EditText(myContext);
+                        quantityAlert.setView(quantityInput);
+                        quantityAlert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                temp_ingred_quantity = quantityInput.getText().toString();
+                                temp_ingred = new Ingredient(temp_ingred_quantity, temp_ingred_name);
+                                shoppingList.add(temp_ingred);
+                                Collections.sort(shoppingList);
+                                lv.setAdapter(adapter);
+                            }
+
+                        }
+                        );
+
+                        quantityAlert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                        quantityAlert.show();
+
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -90,50 +107,19 @@ public class InventoryFragment extends ContentFragment {
         });
     }
 
-    public static String preferredCase(String original)
-    {
+    public static String preferredCase(String original) {
         if (original.isEmpty())
             return original;
 
         return original.substring(0, 1).toUpperCase() + original.substring(1).toLowerCase();
     }
 
-    public static void storeArrayVal(ArrayList<String> inArrayList, Context context)
-    {
-        Set<String> WhatToWrite = new HashSet<>(inArrayList);
-        SharedPreferences WordSearchPutPrefs = context.getSharedPreferences("dbArrayValues", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor prefEditor = WordSearchPutPrefs.edit();
-        prefEditor.putStringSet("myArray", WhatToWrite);
-        prefEditor.commit();
+    public ArrayList<Ingredient> getInventory(){
+        return shoppingList;
     }
 
-    public static ArrayList getArrayVal( Context dan)
-    {
-        SharedPreferences WordSearchGetPrefs = dan.getSharedPreferences("dbArrayValues",Activity.MODE_PRIVATE);
-        Set<String> tempSet = new HashSet<>();
-        tempSet = WordSearchGetPrefs.getStringSet("myArray", tempSet);
-        return new ArrayList<>(tempSet);
-    }
-
-    public void removeElement(String selectedItem, final int position){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
-        builder.setTitle("Remove " + selectedItem + "?");
-        final Context myContext = this.getContext();
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                shoppingList.remove(position);
-                Collections.sort(shoppingList);
-                storeArrayVal(shoppingList, myContext);
-                lv.setAdapter(adapter);
-            }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        builder.show();
+    public Ingredient getInventoryItem(int index){
+        return shoppingList.get(index);
     }
 
 }
