@@ -44,11 +44,10 @@ public class GoogleSignIn extends AppCompatActivity implements GoogleApiClient.O
 
         grocereasePrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        statusTextView = (TextView) findViewById(R.id.status_textview);
         signInButton = (SignInButton) findViewById(R.id.sign_in_button);
         signInButton.setOnClickListener(this);
 
-        signOutButton = (Button) findViewById(R.id.signOutButton);
+        signOutButton = (Button) findViewById(R.id.sign_out_button);
         signOutButton.setOnClickListener(this);
     }
 
@@ -58,7 +57,7 @@ public class GoogleSignIn extends AppCompatActivity implements GoogleApiClient.O
             case R.id.sign_in_button:
                 signIn();
                 break;
-            case R.id.signOutButton:
+            case R.id.sign_out_button:
                 signOut();
                 break;
         }

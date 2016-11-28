@@ -4,54 +4,66 @@ package com.ee461lteam16.grocerease;
  * Created by kassiknight on 11/27/16.
  */
 
-import java.util.List;
-
 import android.content.Context;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.RelativeLayout;
+import android.widget.Button;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
-// Custom list item class for menu items
-public class InventoryItemAdapter extends BaseAdapter {
+import java.util.ArrayList;
 
-    private List<Ingredient> inventory;
+public class InventoryItemAdapter extends BaseAdapter implements ListAdapter {
+    private ArrayList<Ingredient> Inventory = new ArrayList<Ingredient>();
     private Context context;
-    private int numItems = 0;
 
-    public InventoryItemAdapter(final List<Ingredient> inventory, Context context) {
-        this.inventory = inventory;
+    public InventoryItemAdapter(ArrayList<Ingredient> inventory, Context context) {
+        this.Inventory = inventory;
         this.context = context;
-        this.numItems = inventory.size();
     }
 
+    @Override
     public int getCount() {
-        return numItems;
+        return Inventory.size();
     }
 
-    public Ingredient getItem(int position) {
-        return inventory.get(position);
+    @Override
+    public Object getItem(int pos) {
+        return Inventory.get(pos);
     }
 
-    public long getItemId(int position) {
+    @Override
+    public long getItemId(int post) {
         return 0;
     }
 
-    public View getView(int position, View convertView, ViewGroup parent) {
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        View view = convertView;
+        if (view == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = inflater.inflate(R.layout.fragment_inventory, null);
+        }
 
-        // Get the current list item
-        final Ingredient item = inventory.get(position);
-        // Get the layout for the list item
-        final RelativeLayout itemLayout = (RelativeLayout) LayoutInflater.from(context).inflate(R.layout.inventory_item, parent, false);
+        //Handle TextView and display string from your list
+        TextView listItemText = (TextView)view.findViewById(R.id.text1);
 
-        // Set the text label as defined in our list item
-        TextView txtLabel = (TextView) itemLayout.findViewById(R.id.text1);
-        txtLabel.setText(item.getName());
+        //listItemText.setText(Inventory.get(position).getName());
 
-        return itemLayout;
+        //Handle buttons and add onClickListeners
+        Button deleteBtn = (Button)view.findViewById(R.id.delete_btn);
+
+      /* deleteBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //do something
+                //Inventory.remove(position); //or some other task
+                notifyDataSetChanged();
+            }
+        });*/
+
+        return view;
     }
-
 }
