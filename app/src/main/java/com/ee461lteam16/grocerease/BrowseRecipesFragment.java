@@ -114,12 +114,12 @@ public class BrowseRecipesFragment extends ContentFragment {
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String text) {
+
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String text) {
-
                 adapter.getFilter().filter(text);
                 return false;
             }
@@ -200,7 +200,6 @@ public class BrowseRecipesFragment extends ContentFragment {
                 }
 
                 results.values = newRecipeList;
-                //System.out.println(newRecipeList);
                 results.count = newRecipeList.size();
 
             }
