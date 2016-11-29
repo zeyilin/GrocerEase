@@ -17,7 +17,8 @@
         <ImageView
             style="@style/ThemeOverlay.FirebaseIcon"
             android:id="@+id/google_icon"
-            android:contentDescription="@string/desc_firebase_lockup"
+            android:contentDescription="GrocerEase Icon"
+            android:src="@drawable/grocerease"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -26,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/title_bottom_margin"
-            android:text="@string/google_title_text"
+            android:text="Welcome to GrocerEase!"
             android:theme="@style/ThemeOverlay.MyTitleText" />
 
         <TextView
