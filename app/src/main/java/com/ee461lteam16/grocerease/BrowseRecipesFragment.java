@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -45,7 +44,7 @@ public class BrowseRecipesFragment extends ContentFragment {
     public static ArrayList<Recipe> searchRecipeList = new ArrayList<>();
     public static ArrayAdapter<Recipe> adapter;
     public FilterRecipes filterRecipes;
-    public static HashSet<Long> favorites;
+    public static ArrayList<Long> favorites;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -165,13 +164,13 @@ public class BrowseRecipesFragment extends ContentFragment {
 
     }
 
-    public HashSet<Long> getFavorites(){
+    public ArrayList<Long> getFavorites(){
 
         if (false){
             //logic to pull existing favorites from DB if they have logged in previously
-            return new HashSet<Long>();
+            return new ArrayList<>();
         } else {
-            return new HashSet<Long>();
+            return new ArrayList<>();
         }
 
     }
