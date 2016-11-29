@@ -5,11 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -26,12 +24,8 @@ import java.util.Collections;
 public class InventoryFragment extends ContentFragment {
 
     public final String TAG = "InventoryFragment";
-    ArrayList<Ingredient> shoppingList = new ArrayList<>();
-    ArrayAdapter adapter = null;
+    ArrayList<Ingredient> Inventory = new ArrayList<>();
     ListView lv = null;
-    Ingredient ingred_1 = new Ingredient("12 dozen", "eggs");
-    Ingredient ingred_2 = new Ingredient("2 gallons", "milk");
-    Ingredient ingred_3 = new Ingredient("6 lbs", "turkey");
     Ingredient temp_ingred;
     String temp_ingred_name;
     String temp_ingred_quantity;
@@ -47,14 +41,10 @@ public class InventoryFragment extends ContentFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         final Context myContext = this.getContext();
-        shoppingList.add(ingred_1);
-        shoppingList.add(ingred_2);
-        shoppingList.add(ingred_3);
 
-        Collections.sort(shoppingList);
-        //final ListAdapter adapter = new ArrayAdapter<>(myContext, android.R.layout.simple_list_item_1, shoppingList);
-        //final ListAdapter adapter = new InventoryItemAdapter(shoppingList, myContext);
-        lv = (ListView) this.getView().findViewById(R.id.listView);
+        Collections.sort(Inventory);
+        final ListAdapter adapter = new IngredientListAdapter(Inventory, myContext);
+        lv = (ListView) this.getView().findViewById(R.id.inventoryList);
         lv.setAdapter(adapter);
 
         FloatingActionButton addButton = (FloatingActionButton) view.findViewById(R.id.add_to_inventory);
@@ -79,8 +69,8 @@ public class InventoryFragment extends ContentFragment {
                                     public void onClick(DialogInterface dialog, int which) {
                                         temp_ingred_quantity = quantityInput.getText().toString();
                                         temp_ingred = new Ingredient(temp_ingred_quantity, temp_ingred_name);
-                                        shoppingList.add(temp_ingred);
-                                        Collections.sort(shoppingList);
+                                        Inventory.add(temp_ingred);
+                                        Collections.sort(Inventory);
                                         lv.setAdapter(adapter);
                                     }
 
@@ -106,14 +96,15 @@ public class InventoryFragment extends ContentFragment {
                 builder.show();
             }
         });
+
     }
 
     public ArrayList<Ingredient> getInventory(){
-        return shoppingList;
+        return Inventory;
     }
 
     public Ingredient getInventoryItem(int index){
-        return shoppingList.get(index);
+        return Inventory.get(index);
     }
 
 }
