@@ -41,6 +41,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 /**
  * Demonstrate Firebase Authentication using a Google ID Token.
@@ -182,10 +189,9 @@ public class GoogleSignInActivity extends BaseActivity implements
                             Log.w(TAG, "signInWithCredential", task.getException());
                             Toast.makeText(GoogleSignInActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                        } else {
+                            updateFromDatabase();
                         }
-                        // [START_EXCLUDE]
-//                        hideProgressDialog();
-                        // [END_EXCLUDE]
                     }
                 });
     }
@@ -214,6 +220,57 @@ public class GoogleSignInActivity extends BaseActivity implements
                 });
         isLoggedIn = true;
         grocereasePrefs.edit().putBoolean("isLoggedIn", isLoggedIn).commit();
+    }
+
+    private void updateFromDatabase() {
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+        String dbRecipesID = mAuth.getCurrentUser().getUid() + "_Recipes";
+        String dbInventoryID = mAuth.getCurrentUser().getUid() + "_Inventory";
+        String dbGroceryListID = mAuth.getCurrentUser().getUid() + "_GroceryList";
+
+        DatabaseReference dbRecipes = database.getReference(dbRecipesID);
+        DatabaseReference dbInventory = database.getReference(dbInventoryID);
+        DatabaseReference dbGroceryList = database.getReference(dbGroceryListID);
+
+        dbRecipes.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<String> post = (ArrayList<String>) dataSnapshot.getValue();
+                Log.d("output: ", post.toString());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+        dbInventory.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<String> post = (ArrayList<String>) dataSnapshot.getValue();
+                Log.d("output: ", post.toString());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+        dbGroceryList.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<String> post = (ArrayList<String>) dataSnapshot.getValue();
+                Log.d("output: ", post.toString());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
     }
 
     private void revokeAccess() {

@@ -37,10 +37,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -61,7 +65,6 @@ public class SettingsFragment extends ContentFragment implements GoogleApiClient
     private ImageView imgProfilePic;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private FirebaseDatabase database;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -168,7 +171,6 @@ public class SettingsFragment extends ContentFragment implements GoogleApiClient
 
         });
 
-
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -176,23 +178,91 @@ public class SettingsFragment extends ContentFragment implements GoogleApiClient
                         new ResultCallback<Status>() {
                             @Override
                             public void onResult(Status status) {
-
-                                database = FirebaseDatabase.getInstance();
-                                DatabaseReference myRef = database.getReference("test store");
-                                ArrayList<Long> testArrayList = new ArrayList<>();
-                                testArrayList.add(new Long(1337));
-                                myRef.setValue(testArrayList);
-
+                                writeToDatabase();
                                 isLoggedIn = false;
-                                grocereasePrefs.edit().putBoolean("isLoggedIn", isLoggedIn).commit();
+                                grocereasePrefs.edit().putBoolean("isLoggedIn", isLoggedIn).apply();
                                 updateUI(false);
                             }
                         });
             }
 
         });
-
         return v;
+    }
+
+    public void writeToDatabase() {
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+        String dbRecipesID = mAuth.getCurrentUser().getUid() + "_Recipes";
+        String dbInventoryID = mAuth.getCurrentUser().getUid() + "_Inventory";
+        String dbGroceryListID = mAuth.getCurrentUser().getUid() + "_GroceryList";
+
+        DatabaseReference dbRecipes = database.getReference(dbRecipesID);
+        DatabaseReference dbInventory = database.getReference(dbInventoryID);
+        DatabaseReference dbGroceryList = database.getReference(dbGroceryListID);
+
+        ArrayList<String> db1 = new ArrayList<>();
+        ArrayList<String> db2 = new ArrayList<>();
+        ArrayList<String> db3 = new ArrayList<>();
+
+        db1.add("Hello");
+        db2.add("Cruel");
+        db3.add("World");
+
+        dbRecipes.setValue(db1);
+        dbInventory.setValue(db2);
+        dbGroceryList.setValue(db3);
+    }
+
+    public void updateFromDatabase() {
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+        String dbRecipesID = mAuth.getCurrentUser().getUid() + "_Recipes";
+        String dbInventoryID = mAuth.getCurrentUser().getUid() + "_Inventory";
+        String dbGroceryListID = mAuth.getCurrentUser().getUid() + "_GroceryList";
+
+        DatabaseReference dbRecipes = database.getReference(dbRecipesID);
+        DatabaseReference dbInventory = database.getReference(dbInventoryID);
+        DatabaseReference dbGroceryList = database.getReference(dbGroceryListID);
+
+        dbRecipes.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<String> post = (ArrayList<String>) dataSnapshot.getValue();
+                Log.d("output: ", post.toString());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+        dbInventory.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<String> post = (ArrayList<String>) dataSnapshot.getValue();
+                Log.d("output: ", post.toString());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+        dbGroceryList.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<String> post = (ArrayList<String>) dataSnapshot.getValue();
+                Log.d("output: ", post.toString());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
     }
 
     @Override
@@ -212,26 +282,21 @@ public class SettingsFragment extends ContentFragment implements GoogleApiClient
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             isLoggedIn = true;
-            grocereasePrefs.edit().putBoolean("isLoggedIn", isLoggedIn).commit();
-
+            grocereasePrefs.edit().putBoolean("isLoggedIn", isLoggedIn).apply();
             GoogleSignInAccount acct = result.getSignInAccount();
             firebaseAuthWithGoogle(acct);
             mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
-            //Similarly you can get the email and photourl using acct.getEmail() and  acct.getPhotoUrl()
-
-            if(acct.getPhotoUrl() != null)
+            if(acct.getPhotoUrl() != null) {
                 new LoadProfileImage(imgProfilePic).execute(acct.getPhotoUrl().toString());
-
-
+            }
+            updateFromDatabase();
             updateUI(true);
         } else {
             // next, sign out, show unauthenticated UI.
             updateUI(false);
             isLoggedIn = false;
-            grocereasePrefs.edit().putBoolean("isLoggedIn", isLoggedIn).commit();
+            grocereasePrefs.edit().putBoolean("isLoggedIn", isLoggedIn).apply();
         }
-            // TODO - save favorited recipes, ingredients saved
-            // access database with UserID+FavoriteRecipes, Inventory, GroceryList
     }
 
     // [START auth_with_google]
@@ -256,9 +321,6 @@ public class SettingsFragment extends ContentFragment implements GoogleApiClient
                             Toast.makeText(getContext(), "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
-                        // [START_EXCLUDE]
-//                        hideProgressDialog();
-                        // [END_EXCLUDE]
                     }
                 });
     }
@@ -284,33 +346,14 @@ public class SettingsFragment extends ContentFragment implements GoogleApiClient
         Toast.makeText(getContext(), "Google Play Services error.", Toast.LENGTH_SHORT).show();
     }
 
-    private void showProgressDialog() {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(getActivity());
-            mProgressDialog.setMessage(getString(R.string.loading));
-            mProgressDialog.setIndeterminate(true);
-        }
-
-        mProgressDialog.show();
-    }
-
-    private void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.hide();
-        }
-
-    }
-
     /**
      * Background Async task to load user profile picture from url
      * */
     private class LoadProfileImage extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
-
         public LoadProfileImage(ImageView bmImage) {
             this.bmImage = bmImage;
         }
-
         protected Bitmap doInBackground(String... uri) {
             String url = uri[0];
             Bitmap mIcon11 = null;
@@ -325,13 +368,9 @@ public class SettingsFragment extends ContentFragment implements GoogleApiClient
         }
 
         protected void onPostExecute(Bitmap result) {
-
             if (result != null) {
-
-
                 Bitmap resized = Bitmap.createScaledBitmap(result,200,200, true);
                 bmImage.setImageBitmap(ImageHelper.getRoundedCornerBitmap(getContext(),resized,250,200,200, false, false, false, false));
-
             }
         }
     }
