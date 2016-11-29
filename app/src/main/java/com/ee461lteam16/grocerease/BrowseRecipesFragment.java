@@ -80,6 +80,7 @@ public class BrowseRecipesFragment extends ContentFragment {
                     public View getView(int position, View convertView, ViewGroup parent) {
 
                         View view = super.getView(position, convertView, parent);
+
                         TextView title = (TextView) view.findViewById(R.id.Recipe_title);
                         TextView minutes = (TextView) view.findViewById(R.id.minutes);
                         TextView servings = (TextView) view.findViewById(R.id.servings);
@@ -91,10 +92,9 @@ public class BrowseRecipesFragment extends ContentFragment {
                         title.setText(recipe.getTitle());
                         minutes.setText(recipe.getReadyInString());
                         servings.setText(recipe.getServingsString());
-                        Picasso.with(view.getContext()).load(recipe.getImageURL()).placeholder(view.getContext().getResources().getDrawable(android.R.drawable.star_on)).into(image);
+                        Picasso.with(view.getContext()).load(recipe.getImageURL()).placeholder(view.getContext().getResources().getIdentifier("@drawable/grocerease", null, "com.ee461lteam16.grocerease")).into(image);
 
-
-                        if(recipe.isFavorited()){
+                        if (recipe.isFavorited()) {
                             favorite.setVisibility(View.VISIBLE);
 
                             String uri = "@drawable/filled_heart";  // where myresource (without the extension) is the file
@@ -103,7 +103,7 @@ public class BrowseRecipesFragment extends ContentFragment {
                             Drawable res = getResources().getDrawable(imageResource);
 
                             favorite.setImageDrawable(res);
-                        }else {
+                        } else {
                             favorite.setVisibility(View.GONE);
                         }
 
@@ -126,6 +126,9 @@ public class BrowseRecipesFragment extends ContentFragment {
         Activity myActivity = this.getActivity();
         ListView listView = (ListView) myActivity.findViewById(R.id.recipe_list_view);
         listView.setAdapter(adapter);
+
+        TextView emptyText = (TextView) myActivity.findViewById(R.id.recipes_empty);
+        listView.setEmptyView(emptyText);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -250,6 +253,7 @@ public class BrowseRecipesFragment extends ContentFragment {
                     .read("$.recipes[*][" + query + "]", type);
 
         } catch (JSONException e){
+
 
 
         }

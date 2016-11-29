@@ -29,14 +29,27 @@
             android:layout_alignParentRight="true"
             android:layout_height="wrap_content" />
 
-
     </RelativeLayout>
-
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:orientation="horizontal"
+        >
     <ListView
         android:id="@+id/recipe_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:listSelector="@android:color/transparent">
     </ListView>
+
+    <TextView android:id="@+id/recipes_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:text="@string/recipes_empty" />
+
+    </RelativeLayout>
 
 </LinearLayout>

@@ -10,10 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,11 +55,14 @@ public class GroceryListFragment extends ContentFragment {
         lv.setAdapter(adapter);
         lv.setEmptyView(this.getView().findViewById(android.R.id.empty));
 
+        TextView emptyText = (TextView)this.getView().findViewById(R.id.grocerylist_empty);
+        lv.setEmptyView(emptyText);
+
         FloatingActionButton addButton = (FloatingActionButton) view.findViewById(R.id.add_to_inventory);
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(myContext);
-                builder.setTitle("Add Item");
+                builder.setTitle(getString(R.string.add_item_prompt));
                 final EditText input = new EditText(myContext);
                 builder.setView(input);
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -69,7 +72,7 @@ public class GroceryListFragment extends ContentFragment {
                         temp_ingred_name = input.getText().toString();
 
                         AlertDialog.Builder quantityAlert = new AlertDialog.Builder(myContext);
-                        quantityAlert.setTitle("How many?");
+                        quantityAlert.setTitle(getString(R.string.add_quant_prompt));
                         final EditText quantityInput = new EditText(myContext);
                         quantityAlert.setView(quantityInput);
                         quantityAlert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
