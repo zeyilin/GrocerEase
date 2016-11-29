@@ -53,7 +53,7 @@ public class InventoryFragment extends ContentFragment {
 
         Collections.sort(shoppingList);
         //final ListAdapter adapter = new ArrayAdapter<>(myContext, android.R.layout.simple_list_item_1, shoppingList);
-        final ListAdapter adapter = new InventoryItemAdapter(shoppingList, myContext);
+        //final ListAdapter adapter = new InventoryItemAdapter(shoppingList, myContext);
         lv = (ListView) this.getView().findViewById(R.id.listView);
         lv.setAdapter(adapter);
 

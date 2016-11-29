@@ -20,10 +20,9 @@ public class SplashActivity extends AppCompatActivity {
 
         }
         else {
-            intent = new Intent(this, MainActivity.class);
+            intent = new Intent(this, GoogleSignInActivity.class);
         }
 
-        //Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
     }
