@@ -60,7 +60,7 @@ public class MainActivity extends FragmentActivity {
         mTabs.add(new InventoryFragment());
         mTabs.get(1).setTitle("Inventory");
         mTabs.add(new SettingsFragment());
-        mTabs.get(2).setTitle("Settings");
+        mTabs.get(2).setTitle("Account");
 
         viewPager.getAdapter().notifyDataSetChanged();
     }
