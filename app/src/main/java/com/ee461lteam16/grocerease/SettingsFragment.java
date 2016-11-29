@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +41,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 
 /**
  * Created by ZeyiLin on 11/26/16.
@@ -49,32 +49,19 @@ import java.io.InputStream;
 
 public class SettingsFragment extends ContentFragment implements GoogleApiClient.OnConnectionFailedListener {
 
-
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
     private SharedPreferences grocereasePrefs;
     private static boolean isLoggedIn = false;
-
-    TextView statusTextView;
     private GoogleApiClient mGoogleApiClient;
     private SignInButton signInButton;
     private Button signOutButton;
-//    private Button disconnectButton;
-    private LinearLayout signOutView;
     private TextView mStatusTextView;
     private ProgressDialog mProgressDialog;
     private ImageView imgProfilePic;
-
-    // [START declare_auth]
     private FirebaseAuth mAuth;
-    // [END declare_auth]
-
-    // [START declare_auth_listener]
     private FirebaseAuth.AuthStateListener mAuthListener;
-    // [END declare_auth_listener]
-
-
-    private TextView mDetailTextView;
+    private FirebaseDatabase database;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -167,7 +154,6 @@ public class SettingsFragment extends ContentFragment implements GoogleApiClient
 
         signInButton = (SignInButton) v.findViewById(R.id.sign_in_button);
         signOutButton = (Button) v.findViewById(R.id.sign_out_button);
-//        disconnectButton = (Button) v.findViewById(R.id.disconnect_button);
         imgProfilePic = (ImageView) v.findViewById(R.id.img_profile_pic);
 
         mStatusTextView = (TextView) v.findViewById(R.id.status);
@@ -190,15 +176,21 @@ public class SettingsFragment extends ContentFragment implements GoogleApiClient
                         new ResultCallback<Status>() {
                             @Override
                             public void onResult(Status status) {
+
+                                database = FirebaseDatabase.getInstance();
+                                DatabaseReference myRef = database.getReference("test store");
+                                ArrayList<Long> testArrayList = new ArrayList<>();
+                                testArrayList.add(new Long(1337));
+                                myRef.setValue(testArrayList);
+
+                                isLoggedIn = false;
+                                grocereasePrefs.edit().putBoolean("isLoggedIn", isLoggedIn).commit();
                                 updateUI(false);
                             }
                         });
             }
 
         });
-
-//
-
 
         return v;
     }
@@ -211,11 +203,6 @@ public class SettingsFragment extends ContentFragment implements GoogleApiClient
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
-        } else {
-            // Signed out, show unauthenticated UI.
-            updateUI(false);
-            isLoggedIn = false;
-            grocereasePrefs.edit().putBoolean("isLoggedIn", isLoggedIn).commit();
         }
     }
 
@@ -235,21 +222,14 @@ public class SettingsFragment extends ContentFragment implements GoogleApiClient
             if(acct.getPhotoUrl() != null)
                 new LoadProfileImage(imgProfilePic).execute(acct.getPhotoUrl().toString());
 
-            updateUI(true);
 
+            updateUI(true);
         } else {
-            // Signed out, show unauthenticated UI.
+            // next, sign out, show unauthenticated UI.
             updateUI(false);
             isLoggedIn = false;
             grocereasePrefs.edit().putBoolean("isLoggedIn", isLoggedIn).commit();
-
-            // TEST WRITE TO FIREBASE REAL TIME DATABASE
-            // Write a message to the database
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference("message");
-
-            myRef.setValue("Hello, World!");
-
+        }
             // TODO - save favorited recipes, ingredients saved
             // access database with UserID+FavoriteRecipes, Inventory, GroceryList
     }
