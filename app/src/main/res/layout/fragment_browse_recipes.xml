@@ -7,30 +7,30 @@
     android:focusableInTouchMode="true"
     android:focusable="true" >
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:orientation="horizontal"
         >
 
-
         <SearchView
             android:id="@+id/recipe_search"
-            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/recipe_filter"
-            android:queryHint="Search.." >
+            android:layout_alignParentLeft="true"
+            android:queryHint="Search.."
+            android:orientation="horizontal"
+            android:layout_width="wrap_content">
         </SearchView>
 
         <com.ee461lteam16.grocerease.MultiSpinner
             android:id="@+id/multi_spinner_filter"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
+            android:layout_alignParentRight="true"
+            android:layout_height="wrap_content" />
 
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/recipe_list_view"
