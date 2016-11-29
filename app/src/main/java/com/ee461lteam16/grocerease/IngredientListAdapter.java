@@ -15,23 +15,23 @@ import android.view.LayoutInflater;
 
 import java.util.ArrayList;
 
-public class InventoryItemAdapter extends BaseAdapter implements ListAdapter {
-    private ArrayList<Ingredient> Inventory = new ArrayList<Ingredient>();
+public class IngredientListAdapter extends BaseAdapter implements ListAdapter {
+    private ArrayList<Ingredient> IngredientList = new ArrayList<Ingredient>();
     private Context context;
 
-    public InventoryItemAdapter(ArrayList<Ingredient> inventory, Context context) {
-        this.Inventory = inventory;
+    public IngredientListAdapter(ArrayList<Ingredient> ingredientList, Context context) {
+        this.IngredientList = ingredientList;
         this.context = context;
     }
 
     @Override
     public int getCount() {
-        return Inventory.size();
+        return IngredientList.size();
     }
 
     @Override
     public Object getItem(int pos) {
-        return Inventory.get(pos);
+        return IngredientList.get(pos);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class InventoryItemAdapter extends BaseAdapter implements ListAdapter {
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.inventory_item, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.ingredient_item, parent, false);
         }
 
         // Lookup view for data population
@@ -58,7 +58,7 @@ public class InventoryItemAdapter extends BaseAdapter implements ListAdapter {
         Button deleteButton = (Button) convertView.findViewById(R.id.delete_btn);
         deleteButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                Inventory.remove(position);
+                IngredientList.remove(position);
                 notifyDataSetChanged();
             }
         });
