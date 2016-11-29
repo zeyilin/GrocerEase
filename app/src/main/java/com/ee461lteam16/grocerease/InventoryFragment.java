@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ListAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,6 +47,7 @@ public class InventoryFragment extends ContentFragment {
         final ListAdapter adapter = new IngredientListAdapter(Inventory, myContext);
         lv = (ListView) this.getView().findViewById(R.id.inventoryList);
         lv.setAdapter(adapter);
+        lv.setEmptyView(this.getView().findViewById(android.R.id.empty));
 
         FloatingActionButton addButton = (FloatingActionButton) view.findViewById(R.id.add_to_inventory);
         addButton.setOnClickListener(new View.OnClickListener() {

@@ -53,6 +53,7 @@ public class GroceryListFragment extends ContentFragment {
         final ListAdapter adapter = new IngredientListAdapter(groceryList, myContext);
         lv = (ListView) this.getView().findViewById(R.id.groceryList);
         lv.setAdapter(adapter);
+        lv.setEmptyView(this.getView().findViewById(android.R.id.empty));
 
         FloatingActionButton addButton = (FloatingActionButton) view.findViewById(R.id.add_to_inventory);
         addButton.setOnClickListener(new View.OnClickListener() {

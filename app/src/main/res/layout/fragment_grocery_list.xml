@@ -25,7 +25,8 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:paddingLeft="6dip"
         android:minHeight="?android:attr/listPreferredItemHeight"
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
         android:text="Your grocery list is empty!"/>
 
     <android.support.design.widget.FloatingActionButton
