@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,6 +21,9 @@ import java.util.List;
 
 public class RecipeDetails extends Activity {
 
+    public Recipe currentRecipe;
+    public int index;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -26,7 +31,8 @@ public class RecipeDetails extends Activity {
 
         setContentView(R.layout.activity_recipe_details);
 
-        Recipe currentRecipe = (Recipe) getIntent().getSerializableExtra("currentRecipe");
+        currentRecipe = (Recipe) getIntent().getSerializableExtra("currentRecipe");
+        index = (Integer) getIntent().getSerializableExtra("index");
 
         TextView title = (TextView) findViewById(R.id.recipeTextTitle);
         title.setText(currentRecipe.getTitle());
@@ -68,6 +74,36 @@ public class RecipeDetails extends Activity {
 
         TextView summary = (TextView) findViewById(R.id.layoutSteps);
         summary.setText(currentRecipe.getInstructions());
+
+        CheckBox favorite = (CheckBox) findViewById(R.id.favorite);
+        if (currentRecipe.isFavorited() || BrowseRecipesFragment.favorites.contains(currentRecipe.getId())) {
+            favorite.setChecked(true);
+        }
+        favorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    currentRecipe.setFavorited(true);
+
+                    BrowseRecipesFragment.favorites.add(currentRecipe.getId());
+
+                    //set favorite for recipe at index
+                    BrowseRecipesFragment.searchRecipeList.get(index).setFavorited(true);
+
+                } else {
+                    currentRecipe.setFavorited(false);
+
+                    if (BrowseRecipesFragment.favorites.contains(currentRecipe.getId())){
+                        BrowseRecipesFragment.favorites.remove(currentRecipe.getId());
+                    }
+
+                    BrowseRecipesFragment.searchRecipeList.get(index).setFavorited(false);
+
+                }
+                System.out.println("Trying to update list...");
+                BrowseRecipesFragment.updateList();
+            }
+        });
 
     }
 

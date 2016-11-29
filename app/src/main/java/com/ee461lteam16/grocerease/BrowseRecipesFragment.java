@@ -3,8 +3,8 @@ package com.ee461lteam16.grocerease;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +30,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -40,9 +41,10 @@ public class BrowseRecipesFragment extends ContentFragment {
 
     public final String TAG = "BrowseRecipesFragment";
     public ArrayList<Recipe> recipeList = new ArrayList<>();
-    public ArrayList<Recipe> searchRecipeList = new ArrayList<>();
-    public ArrayAdapter<Recipe> adapter;
+    public static ArrayList<Recipe> searchRecipeList = new ArrayList<>();
+    public static ArrayAdapter<Recipe> adapter;
     public FilterRecipes filterRecipes;
+    public static ArrayList<Long> favorites;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,16 +52,25 @@ public class BrowseRecipesFragment extends ContentFragment {
         // Replace LinearLayout by the type of the root element of the layout you're trying to load
         LinearLayout llLayout    = (LinearLayout)    inflater.inflate(R.layout.fragment_browse_recipes, container, false);
 
-        recipeList.addAll(getRecipes());
-        searchRecipeList.addAll(getRecipes());
-
         return llLayout;
+    }
+
+    public static void updateList(){
+
+        Collections.sort(searchRecipeList, new SortByFavorite());
+        adapter.notifyDataSetChanged();
+
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        //recipeList.addAll(getRecipes());
+        favorites = getFavorites();
+
+        recipeList.addAll(getRecipes());
+        searchRecipeList.addAll(getRecipes());
+
+        Collections.sort(searchRecipeList, new SortByFavorite());
 
         adapter =
                 new ArrayAdapter<Recipe>(this.getContext(), R.layout.recipe_list, R.id.Recipe_title, searchRecipeList) {
@@ -73,13 +84,29 @@ public class BrowseRecipesFragment extends ContentFragment {
                         TextView minutes = (TextView) view.findViewById(R.id.minutes);
                         TextView servings = (TextView) view.findViewById(R.id.servings);
                         ImageView image = (ImageView) view.findViewById(R.id.Recipe_icon);
+                        ImageView favorite = (ImageView) view.findViewById(R.id.Recipe_favorited);
 
-                        final Recipe recipe = (Recipe) this.getItem(position);
+                        Recipe recipe = (Recipe) searchRecipeList.get(position);
 
                         title.setText(recipe.getTitle());
                         minutes.setText(recipe.getReadyInString());
                         servings.setText(recipe.getServingsString());
                         Picasso.with(view.getContext()).load(recipe.getImageURL()).placeholder(view.getContext().getResources().getDrawable(android.R.drawable.star_on)).into(image);
+
+
+                        if(recipe.isFavorited()){
+                            favorite.setVisibility(View.VISIBLE);
+
+                            String uri = "@drawable/filled_heart";  // where myresource (without the extension) is the file
+
+                            int imageResource = getResources().getIdentifier(uri, null, "com.ee461lteam16.grocerease");
+                            Drawable res = getResources().getDrawable(imageResource);
+
+                            favorite.setImageDrawable(res);
+                        }else {
+                            favorite.setVisibility(View.GONE);
+                        }
+
                         return view;
                     }
 
@@ -105,7 +132,8 @@ public class BrowseRecipesFragment extends ContentFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Intent intent = new Intent(view.getContext(), RecipeDetails.class);
-                intent.putExtra("currentRecipe", recipeList.get(position));
+                intent.putExtra("index", position);
+                intent.putExtra("currentRecipe", searchRecipeList.get(position));
                 startActivity(intent);
 
             }
@@ -133,6 +161,17 @@ public class BrowseRecipesFragment extends ContentFragment {
         List<String> items = filterRecipes.getFilterItems();
 
         multiSpinner.setItems(items, getString(R.string.for_all), onSelectedListener);
+
+    }
+
+    public ArrayList<Long> getFavorites(){
+
+        if (false){
+            //logic to pull existing favorites from DB if they have logged in previously
+            return new ArrayList<>();
+        } else {
+            return new ArrayList<>();
+        }
 
     }
 
@@ -215,7 +254,10 @@ public class BrowseRecipesFragment extends ContentFragment {
 
         }
 
+        Collections.sort(recipeList, new SortByFavorite());
+
         return recipeList;
+
 
     }
 
@@ -273,13 +315,14 @@ public class BrowseRecipesFragment extends ContentFragment {
             // Now we have to inform the adapter about the new list filtered
             searchRecipeList.clear();
             searchRecipeList.addAll((ArrayList<Recipe>) results.values);
+
+            Collections.sort(searchRecipeList, new SortByFavorite());
+
             System.out.println(searchRecipeList);
             adapter.notifyDataSetChanged();
 
         }
     }
-
-
 
 }
 
