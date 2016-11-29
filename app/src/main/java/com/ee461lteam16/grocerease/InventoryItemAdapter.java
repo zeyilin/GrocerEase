@@ -5,13 +5,13 @@ package com.ee461lteam16.grocerease;
  */
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.view.LayoutInflater;
 
 import java.util.ArrayList;
 
@@ -41,48 +41,31 @@ public class InventoryItemAdapter extends BaseAdapter implements ListAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        View view = getView(position, convertView, parent);
-        TextView title = (TextView) view.findViewById(R.id.text1);
-        Button deleteButton = (Button) view.findViewById(R.id.delete_btn);
+        // Get the data item for this position
+        Ingredient item = (Ingredient) getItem(position);
 
-        final Ingredient item = (Ingredient) this.getItem(position);
+        // Check if an existing view is being reused, otherwise inflate the view
+        if (convertView == null) {
+            convertView = LayoutInflater.from(context).inflate(R.layout.inventory_item, parent, false);
+        }
 
-        title.setText(item.getName());
+        // Lookup view for data population
+        TextView item_name = (TextView) convertView.findViewById(R.id.item_name);
+
+        // Populate the data into the template view using the data object
+        item_name.setText(item.toString());
+
+        Button deleteButton = (Button) convertView.findViewById(R.id.delete_btn);
         deleteButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
+            public void onClick(View v){
                 Inventory.remove(position);
                 notifyDataSetChanged();
             }
         });
-        return view;
 
 
-
-        /*View view = convertView;
-        if (view == null) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.inventory_item, null);
-        }
-
-        //Handle TextView and display string from your list
-        TextView listItemText = (TextView) view.findViewById(R.id.text1);
-        System.out.println(listItemText);
-
-        Ingredient item = (Ingredient) getItem(position);
-        //listItemText.setText("Test");
-
-        //Handle buttons and add onClickListeners
-        Button deleteBtn = (Button)view.findViewById(R.id.delete_btn);
-
-      /* deleteBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                //do something
-                //Inventory.remove(position); //or some other task
-                notifyDataSetChanged();
-            }
-        });*/
+        // Return the completed view to render on screen
+        return convertView;
 
     }
 }

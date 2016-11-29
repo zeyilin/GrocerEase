@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ListAdapter;
+import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,8 +53,7 @@ public class InventoryFragment extends ContentFragment {
         shoppingList.add(ingred_3);
 
         Collections.sort(shoppingList);
-        //final ListAdapter adapter = new ArrayAdapter<>(myContext, android.R.layout.simple_list_item_1, shoppingList);
-        //final ListAdapter adapter = new InventoryItemAdapter(shoppingList, myContext);
+        final ListAdapter adapter = new InventoryItemAdapter(shoppingList, myContext);
         lv = (ListView) this.getView().findViewById(R.id.listView);
         lv.setAdapter(adapter);
 
@@ -106,6 +106,7 @@ public class InventoryFragment extends ContentFragment {
                 builder.show();
             }
         });
+
     }
 
     public ArrayList<Ingredient> getInventory(){
