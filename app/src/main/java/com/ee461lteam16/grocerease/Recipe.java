@@ -32,6 +32,8 @@ public class Recipe implements Serializable {
 
     List<Ingredient> ingredientList;
 
+
+
     boolean favorited;
 
     public Recipe(long id, String title, int minutes, int servings, String instructions, String imageURL, boolean cheap, boolean dairyFree, boolean glutenFree, boolean vegan, boolean vegetarian, boolean veryHealthy, boolean veryPopular, List<String> cuisines, List<Ingredient> ingredientList) {
@@ -50,6 +52,12 @@ public class Recipe implements Serializable {
         this.veryPopular = veryPopular;
         this.cuisines = cuisines;
         this.ingredientList = ingredientList;
+
+        if(BrowseRecipesFragment.favorites.contains(this.id)){
+            this.favorited = true;
+        } else {
+            this.favorited = false;
+        }
     }
 
     public long getId() {
@@ -172,6 +180,14 @@ public class Recipe implements Serializable {
         this.ingredientList = ingredientList;
     }
 
+    public boolean isFavorited() {
+        return favorited;
+    }
+
+    public void setFavorited(boolean favorited) {
+        this.favorited = favorited;
+    }
+
     public String getReadyInString(){
         return "Total Time: " + getMinutes() + " min";
     }
@@ -179,5 +195,6 @@ public class Recipe implements Serializable {
     public String getServingsString(){
         return "Servings: " + getServings();
     }
+
 
 }
