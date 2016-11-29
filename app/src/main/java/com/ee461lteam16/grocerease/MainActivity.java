@@ -59,8 +59,10 @@ public class MainActivity extends FragmentActivity {
         mTabs.get(0).setTitle("Recipes");
         mTabs.add(new InventoryFragment());
         mTabs.get(1).setTitle("Inventory");
+        mTabs.add(new GroceryListFragment());
+        mTabs.get(2).setTitle("GroceryList");
         mTabs.add(new SettingsFragment());
-        mTabs.get(2).setTitle("Settings");
+        mTabs.get(3).setTitle("Settings");
 
         viewPager.getAdapter().notifyDataSetChanged();
     }
