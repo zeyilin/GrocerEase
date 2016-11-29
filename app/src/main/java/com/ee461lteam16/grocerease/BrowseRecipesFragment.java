@@ -17,6 +17,12 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.TypeRef;
@@ -29,6 +35,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -216,11 +223,9 @@ public class BrowseRecipesFragment extends ContentFragment {
 
         } catch (JSONException e){
 
-
         }
 
         return recipeList;
-
     }
 
     public ArrayList<Recipe> getFilteredRecipes(String query){
@@ -251,14 +256,10 @@ public class BrowseRecipesFragment extends ContentFragment {
 
         } catch (JSONException e){
 
-
         }
 
         Collections.sort(recipeList, new SortByFavorite());
-
         return recipeList;
-
-
     }
 
     public String loadJSONFromAsset() {
@@ -320,10 +321,8 @@ public class BrowseRecipesFragment extends ContentFragment {
 
             System.out.println(searchRecipeList);
             adapter.notifyDataSetChanged();
-
         }
     }
-
 }
 
 

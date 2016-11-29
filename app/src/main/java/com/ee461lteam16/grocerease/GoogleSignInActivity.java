@@ -171,9 +171,6 @@ public class GoogleSignInActivity extends BaseActivity implements
     // [START auth_with_google]
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
-        // [START_EXCLUDE silent]
-//        showProgressDialog();
-        // [END_EXCLUDE]
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
@@ -190,17 +187,68 @@ public class GoogleSignInActivity extends BaseActivity implements
                             Toast.makeText(GoogleSignInActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            updateFromDatabase();
+                            // successful login
                         }
                     }
                 });
     }
     // [END auth_with_google]
 
+    private void updateFromDatabase() {
+        if (mAuth.getCurrentUser() != null) {
+            String dbRecipesID = mAuth.getCurrentUser().getUid() + "_Recipes";
+            String dbInventoryID = mAuth.getCurrentUser().getUid() + "_Inventory";
+            String dbGroceryListID = mAuth.getCurrentUser().getUid() + "_GroceryList";
+            DatabaseReference mFavesRef = FirebaseDatabase.getInstance().getReference(dbRecipesID);
+            DatabaseReference mInventoryRef = FirebaseDatabase.getInstance().getReference(dbInventoryID);
+            DatabaseReference mGroceryListRef = FirebaseDatabase.getInstance().getReference(dbGroceryListID);
+
+            mFavesRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    BrowseRecipesFragment.favorites = (ArrayList<Long>) dataSnapshot.getValue();
+                    Log.d("favorite recipes: ", BrowseRecipesFragment.favorites.toString());
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            mInventoryRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    ArrayList<Long> TODO = (ArrayList<Long>) dataSnapshot.getValue();
+                    Log.d("TODO :", TODO.toString());
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            mGroceryListRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    ArrayList<Long> TODO = (ArrayList<Long>) dataSnapshot.getValue();
+                    Log.d("TODO :", TODO.toString());
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
     // [START signin]
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
+        this.updateFromDatabase();
         isLoggedIn = true;
         grocereasePrefs.edit().putBoolean("isLoggedIn", isLoggedIn).commit();
     }
@@ -218,59 +266,8 @@ public class GoogleSignInActivity extends BaseActivity implements
                         updateUI(null);
                     }
                 });
-        isLoggedIn = true;
+        isLoggedIn = false;
         grocereasePrefs.edit().putBoolean("isLoggedIn", isLoggedIn).commit();
-    }
-
-    private void updateFromDatabase() {
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-
-        String dbRecipesID = mAuth.getCurrentUser().getUid() + "_Recipes";
-        String dbInventoryID = mAuth.getCurrentUser().getUid() + "_Inventory";
-        String dbGroceryListID = mAuth.getCurrentUser().getUid() + "_GroceryList";
-
-        DatabaseReference dbRecipes = database.getReference(dbRecipesID);
-        DatabaseReference dbInventory = database.getReference(dbInventoryID);
-        DatabaseReference dbGroceryList = database.getReference(dbGroceryListID);
-
-        dbRecipes.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ArrayList<String> post = (ArrayList<String>) dataSnapshot.getValue();
-                Log.d("output: ", post.toString());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-            }
-        });
-
-        dbInventory.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ArrayList<String> post = (ArrayList<String>) dataSnapshot.getValue();
-                Log.d("output: ", post.toString());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-            }
-        });
-
-        dbGroceryList.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ArrayList<String> post = (ArrayList<String>) dataSnapshot.getValue();
-                Log.d("output: ", post.toString());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-            }
-        });
     }
 
     private void revokeAccess() {
