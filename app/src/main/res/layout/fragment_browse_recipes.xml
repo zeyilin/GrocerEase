@@ -20,17 +20,28 @@
             android:layout_alignParentLeft="true"
             android:queryHint="Search.."
             android:orientation="horizontal"
-            android:layout_width="wrap_content">
+            android:layout_width="250dp">
         </SearchView>
 
         <com.ee461lteam16.grocerease.MultiSpinner
             android:id="@+id/multi_spinner_filter"
             android:layout_width="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_height="wrap_content" />
-
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/recipe_search" />
 
     </RelativeLayout>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:orientation="horizontal"
+        >
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <ListView
         android:id="@+id/recipe_list_view"
@@ -38,5 +49,16 @@
         android:layout_height="wrap_content"
         android:listSelector="@android:color/transparent">
     </ListView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <TextView android:id="@+id/recipes_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:text="@string/recipes_empty" />
+
+    </RelativeLayout>
 
 </LinearLayout>

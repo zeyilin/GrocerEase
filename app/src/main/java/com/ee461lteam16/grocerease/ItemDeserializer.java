@@ -68,8 +68,32 @@ public class ItemDeserializer extends StdDeserializer<Recipe> {
             }
         }
 
+        int missingIngredients = ingredientList.size();
+        List<Ingredient> inventory = InventoryFragment.getInventory();
+        for (Ingredient i: inventory){
+
+            String name = i.getName().toLowerCase();
+            double val = i.getAmount();
+            String unit = i.getUnit().toLowerCase();
+
+            for (Ingredient j: ingredientList){
+
+                if (j.getName().toLowerCase().equals(name) &&
+                        j.getAmount() <= val &&
+                        j.getUnit().toLowerCase().equals(unit)) {
+                    missingIngredients--;
+                    j.setInInventory(true);
+                } else {
+                    j.setInInventory(false);
+                }
+
+            }
+
+        }
+
         return new Recipe(id, title, minutes, servings, instructions, imageURL, cheap,
-                dairyFree, glutenFree, vegan, vegetarian, veryHealthy, veryPopular, cuisines, ingredientList);
+                dairyFree, glutenFree, vegan, vegetarian, veryHealthy, veryPopular, cuisines, ingredientList,
+                missingIngredients);
 
     }
 

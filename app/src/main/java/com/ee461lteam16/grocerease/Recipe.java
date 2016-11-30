@@ -32,11 +32,13 @@ public class Recipe implements Serializable {
 
     List<Ingredient> ingredientList;
 
-
-
     boolean favorited;
+    int missingIngreds;
 
-    public Recipe(long id, String title, int minutes, int servings, String instructions, String imageURL, boolean cheap, boolean dairyFree, boolean glutenFree, boolean vegan, boolean vegetarian, boolean veryHealthy, boolean veryPopular, List<String> cuisines, List<Ingredient> ingredientList) {
+    public Recipe(long id, String title, int minutes, int servings, String instructions, String imageURL,
+                  boolean cheap, boolean dairyFree, boolean glutenFree, boolean vegan, boolean vegetarian,
+                  boolean veryHealthy, boolean veryPopular, List<String> cuisines, List<Ingredient> ingredientList,
+                  int missingIngreds) {
         this.id = id;
         this.title = title;
         this.minutes = minutes;
@@ -58,6 +60,8 @@ public class Recipe implements Serializable {
         } else {
             this.favorited = false;
         }
+
+        this.missingIngreds = missingIngreds;
     }
 
     public long getId() {
@@ -188,6 +192,8 @@ public class Recipe implements Serializable {
         this.favorited = favorited;
     }
 
+    public int getMissingIngreds(){ return missingIngreds; }
+
     public String getReadyInString(){
         return "Total Time: " + getMinutes() + " min";
     }
@@ -196,5 +202,6 @@ public class Recipe implements Serializable {
         return "Servings: " + getServings();
     }
 
+    public String getMissingIngredsString() {return "Missing Ingredients: " + getMissingIngreds(); }
 
 }
