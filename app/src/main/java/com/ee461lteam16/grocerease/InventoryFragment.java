@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 
 /**
@@ -26,13 +27,13 @@ import java.util.Collections;
 public class InventoryFragment extends ContentFragment {
 
     public final String TAG = "InventoryFragment";
-    static ArrayList<Ingredient> Inventory = new ArrayList<>();
+    public static ArrayList<Ingredient> Inventory = new ArrayList<>();
     ListView lv = null;
+
     Ingredient temp_ingred;
     String temp_ingred_name;
     String temp_ingred_quantity;
-    public IngredientListAdapter adapter;
-
+    public static InventoryListAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,10 +48,9 @@ public class InventoryFragment extends ContentFragment {
         final Context myContext = this.getContext();
 
         Collections.sort(Inventory);
-        adapter = new IngredientListAdapter(Inventory, myContext);
+        adapter = new InventoryListAdapter(Inventory, myContext);
         lv = (ListView) this.getView().findViewById(R.id.inventoryList);
         lv.setAdapter(adapter);
-        lv.setEmptyView(this.getView().findViewById(android.R.id.empty));
 
         TextView emptyText = (TextView)this.getView().findViewById(R.id.inventory_empty);
         lv.setEmptyView(emptyText);
@@ -58,6 +58,9 @@ public class InventoryFragment extends ContentFragment {
         FloatingActionButton addButton = (FloatingActionButton) view.findViewById(R.id.add_to_inventory);
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
+                System.out.println(Inventory.get(0).getName());
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(myContext);
                 builder.setTitle(getString(R.string.add_item_prompt));
                 final EditText input = new EditText(myContext);
@@ -90,8 +93,7 @@ public class InventoryFragment extends ContentFragment {
 
                                         temp_ingred = new Ingredient(temp_ingred_name, val, unit);
                                         Inventory.add(temp_ingred);
-                                        lv.setAdapter(adapter);
-                                    }
+                                        adapter.notifyDataSetChanged();                                    }
 
                                 }
                         );
@@ -129,14 +131,24 @@ public class InventoryFragment extends ContentFragment {
 
     public void deleteSelected(){
 
+        List<Integer> toRemove = new ArrayList<>();
         for (int i = 0; i < Inventory.size(); i++){
             View view = lv.getChildAt(i);
             CheckBox checked = (CheckBox) view.findViewById(R.id.check_grocery_item);
             if (checked.isChecked()){
-                checked.setChecked(false);
-                adapter.remove(i);
+                toRemove.add(i);
             }
+            checked.setChecked(false);
         }
+
+        for (int i = toRemove.size() - 1; i >= 0; i--){
+
+            int index = toRemove.get(i);
+            Inventory.remove(index);
+
+        }
+
+
         adapter.notifyDataSetChanged();
 
     }
@@ -149,8 +161,9 @@ public class InventoryFragment extends ContentFragment {
         return Inventory.get(index);
     }
 
-    public static void addIngredients(ArrayList<Ingredient> add){
+    public static void addIngredients(List<Ingredient> add){
         Inventory.addAll(add);
+        adapter.notifyDataSetChanged();
     }
 
 }

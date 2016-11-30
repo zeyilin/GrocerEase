@@ -28,7 +28,7 @@ public class GroceryListFragment extends ContentFragment {
 
     public final String TAG = "BrowseRecipesFragment";
     public static ArrayList<Ingredient> groceryList = new ArrayList<>();
-    public IngredientListAdapter adapter;
+    public static IngredientListAdapter adapter;
 
     ListView lv = null;
     Ingredient temp_ingred;
@@ -52,7 +52,6 @@ public class GroceryListFragment extends ContentFragment {
         adapter = new IngredientListAdapter(groceryList, myContext);
         lv = (ListView) this.getView().findViewById(R.id.groceryList);
         lv.setAdapter(adapter);
-        lv.setEmptyView(this.getView().findViewById(android.R.id.empty));
 
         TextView emptyText = (TextView)this.getView().findViewById(R.id.grocerylist_empty);
         lv.setEmptyView(emptyText);
@@ -92,7 +91,7 @@ public class GroceryListFragment extends ContentFragment {
 
                                         temp_ingred = new Ingredient(temp_ingred_name, val, unit);
                                         groceryList.add(temp_ingred);
-                                        lv.setAdapter(adapter);
+                                        adapter.notifyDataSetChanged();
                                     }
 
                                 }
@@ -123,10 +122,9 @@ public class GroceryListFragment extends ContentFragment {
         move.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                ArrayList<Ingredient> toMove = findSelected();
+                List<Ingredient> toMove = findSelected();
                 System.out.println("INGREDIENTS TO MOVE: " + toMove.size());
                 InventoryFragment.addIngredients(toMove);
-
 
             }
         });
@@ -135,25 +133,34 @@ public class GroceryListFragment extends ContentFragment {
         delete.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                ArrayList<Ingredient> toMove = findSelected();
+                List<Ingredient> toMove = findSelected();
 
             }
         });
 
     }
 
-    public ArrayList<Ingredient> findSelected(){
+    public List<Ingredient> findSelected(){
 
-        ArrayList<Ingredient> selectedIngredients = new ArrayList<Ingredient>();
+        List<Ingredient> selectedIngredients = new ArrayList<Ingredient>();
+        List<Integer> toRemove = new ArrayList<>();
         for (int i = 0; i < groceryList.size(); i++){
             View view = lv.getChildAt(i);
             CheckBox checked = (CheckBox) view.findViewById(R.id.check_grocery_item);
             if (checked.isChecked()){
                 selectedIngredients.add(groceryList.get(i));
-                checked.setChecked(false);
-                adapter.remove(i);
+                toRemove.add(i);
             }
+            checked.setChecked(false);
         }
+
+        for (int i = toRemove.size() - 1; i >= 0; i--){
+
+            int index = toRemove.get(i);
+            groceryList.remove(index);
+
+        }
+
         adapter.notifyDataSetChanged();
         return selectedIngredients;
 

@@ -71,7 +71,10 @@ public class BrowseRecipesFragment extends ContentFragment {
 
         favorites = getFavorites();
 
+        recipeList.clear();
         recipeList.addAll(getRecipes());
+
+        searchRecipeList.clear();
         searchRecipeList.addAll(getRecipes());
 
         Collections.sort(searchRecipeList, new SortByFavorite());

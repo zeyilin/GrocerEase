@@ -27,6 +27,7 @@ public class RecipeDetails extends Activity {
     public int index;
     public List<Ingredient> ingredientList;
     ListView listview;
+    public List<Ingredient> inventoryList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +67,9 @@ public class RecipeDetails extends Activity {
 
                         CheckBox checkBox = (CheckBox) view.findViewById(R.id.check_ingredient);
 
-                        System.out.println(ingredient.getName() + " in inventory? " + ingredient.isInInventory());
-                        if (ingredient.isInInventory()){
+                        boolean toCheck = findInInventory(ingredient);
+
+                        if (toCheck){
                             checkBox.setChecked(false);
                         } else {
                             checkBox.setChecked(true);
@@ -79,6 +81,9 @@ public class RecipeDetails extends Activity {
 
 
         listview.setAdapter(adapter);
+
+
+
 
         ListHelper.getListViewSize(listview);
 
@@ -122,7 +127,9 @@ public class RecipeDetails extends Activity {
         Button move = (Button) findViewById(R.id.move_to_list);
         move.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
                 List<Ingredient> moveIngredients = new ArrayList<Ingredient>();
+
                 for (int i = 0; i < ingredientList.size(); i++){
                     View view = listview.getChildAt(i);
                     CheckBox checked = (CheckBox) view.findViewById(R.id.check_ingredient);
@@ -135,6 +142,31 @@ public class RecipeDetails extends Activity {
                 GroceryListFragment.addIngredients(moveIngredients);
             }
         });
+
+    }
+
+    public boolean findInInventory(Ingredient current){
+
+
+        List<Ingredient> inventory = InventoryFragment.getInventory();
+        for (Ingredient i: inventory) {
+
+            String name = i.getName().toLowerCase();
+            double val = i.getAmount();
+            String unit = i.getUnit().toLowerCase();
+
+
+            if (current.getName().toLowerCase().equals(name) &&
+                    current.getAmount() <= val &&
+                    current.getUnit().toLowerCase().equals(unit)) {
+
+
+                return true;
+            }
+
+        }
+        return false;
+
 
     }
 
