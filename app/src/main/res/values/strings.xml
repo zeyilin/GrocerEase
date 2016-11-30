@@ -115,4 +115,6 @@
     <string name="recipes_empty">No recipe results given search criteria. Try again!</string>
 
     <string name="move_to_list">Move selected ingredients to grocery list.</string>
+    <string name="move_to_inventory">Move selected to inventory</string>
+    <string name="delete_from_list">Delete selected</string>
 </resources>

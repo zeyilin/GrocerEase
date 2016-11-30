@@ -5,13 +5,13 @@ package com.ee461lteam16.grocerease;
  */
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListAdapter;
 import android.widget.TextView;
-import android.view.LayoutInflater;
 
 import java.util.ArrayList;
 
@@ -46,26 +46,23 @@ public class IngredientListAdapter extends BaseAdapter implements ListAdapter {
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.ingredient_item, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.grocery_row, parent, false);
         }
 
         // Lookup view for data population
         TextView item_name = (TextView) convertView.findViewById(R.id.item_name);
-
+        CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.check_ingredient);
         // Populate the data into the template view using the data object
         item_name.setText(item.toString());
-
-        Button deleteButton = (Button) convertView.findViewById(R.id.delete_btn);
-        deleteButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                IngredientList.remove(position);
-                notifyDataSetChanged();
-            }
-        });
-
 
         // Return the completed view to render on screen
         return convertView;
 
     }
+
+    public void remove(int position){
+        IngredientList.remove(position);
+        notifyDataSetChanged();
+    }
+
 }

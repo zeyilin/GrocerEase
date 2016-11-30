@@ -8,9 +8,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -28,7 +28,7 @@ public class GroceryListFragment extends ContentFragment {
 
     public final String TAG = "BrowseRecipesFragment";
     public static ArrayList<Ingredient> groceryList = new ArrayList<>();
-    public ArrayAdapter<Recipe> adapter;
+    public IngredientListAdapter adapter;
 
     ListView lv = null;
     Ingredient temp_ingred;
@@ -49,7 +49,7 @@ public class GroceryListFragment extends ContentFragment {
         final Context myContext = this.getContext();
 
         Collections.sort(groceryList);
-        final ListAdapter adapter = new IngredientListAdapter(groceryList, myContext);
+        adapter = new IngredientListAdapter(groceryList, myContext);
         lv = (ListView) this.getView().findViewById(R.id.groceryList);
         lv.setAdapter(adapter);
         lv.setEmptyView(this.getView().findViewById(android.R.id.empty));
@@ -117,6 +117,45 @@ public class GroceryListFragment extends ContentFragment {
                 builder.show();
             }
         });
+
+
+        Button move = (Button) this.getView().findViewById(R.id.move_to_inventory);
+        move.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                ArrayList<Ingredient> toMove = findSelected();
+                System.out.println("INGREDIENTS TO MOVE: " + toMove.size());
+                InventoryFragment.addIngredients(toMove);
+
+
+            }
+        });
+
+        Button delete = (Button) this.getView().findViewById(R.id.delete_from_list);
+        delete.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                ArrayList<Ingredient> toMove = findSelected();
+
+            }
+        });
+
+    }
+
+    public ArrayList<Ingredient> findSelected(){
+
+        ArrayList<Ingredient> selectedIngredients = new ArrayList<Ingredient>();
+        for (int i = 0; i < groceryList.size(); i++){
+            View view = lv.getChildAt(i);
+            CheckBox checked = (CheckBox) view.findViewById(R.id.check_grocery_item);
+            if (checked.isChecked()){
+                selectedIngredients.add(groceryList.get(i));
+                checked.setChecked(false);
+                adapter.remove(i);
+            }
+        }
+        adapter.notifyDataSetChanged();
+        return selectedIngredients;
 
     }
 
