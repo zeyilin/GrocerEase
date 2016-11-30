@@ -69,7 +69,7 @@ public class MainActivity extends FragmentActivity {
 
     private class ContentFragmentPagerAdapter extends FragmentPagerAdapter {
 
-         ContentFragmentPagerAdapter(FragmentManager fm) {
+        ContentFragmentPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 

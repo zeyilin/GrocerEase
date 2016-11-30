@@ -7,6 +7,8 @@ import android.content.res.AssetManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -53,24 +56,20 @@ public class BrowseRecipesFragment extends ContentFragment {
     public static ArrayList<Recipe> searchRecipeList = new ArrayList<>();
     public static ArrayAdapter<Recipe> adapter;
     public FilterRecipes filterRecipes;
-    public static ArrayList<Long> favorites;
-
-//    public static boolean cleanFavorites() {
-//        favorites.clear();
-//        return true;
-//    }
+    public static ArrayList<Long> favorites = new ArrayList<>();
+    protected FirebaseAuth mAuth;
+    protected FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                           Bundle savedInstanceState) {
         // Replace LinearLayout by the type of the root element of the layout you're trying to load
         LinearLayout llLayout    = (LinearLayout)    inflater.inflate(R.layout.fragment_browse_recipes, container, false);
-
+        firebaseInit();
         return llLayout;
     }
 
     public static void updateList(){
-
         Collections.sort(searchRecipeList, new SortByFavorite());
         adapter.notifyDataSetChanged();
 
@@ -78,12 +77,11 @@ public class BrowseRecipesFragment extends ContentFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-
-        favorites = getFavorites();
-
+        firebaseInit();
+        recipeList.clear();
         recipeList.addAll(getRecipes());
+        searchRecipeList.clear();
         searchRecipeList.addAll(getRecipes());
-
         Collections.sort(searchRecipeList, new SortByFavorite());
 
         adapter =
@@ -106,7 +104,6 @@ public class BrowseRecipesFragment extends ContentFragment {
                         minutes.setText(recipe.getReadyInString());
                         servings.setText(recipe.getServingsString());
                         Picasso.with(view.getContext()).load(recipe.getImageURL()).placeholder(view.getContext().getResources().getDrawable(android.R.drawable.star_on)).into(image);
-
 
                         if(recipe.isFavorited()){
                             favorite.setVisibility(View.VISIBLE);
@@ -178,17 +175,34 @@ public class BrowseRecipesFragment extends ContentFragment {
 
     }
 
-    public ArrayList<Long> getFavorites(){
-        SharedPreferences grocereasePrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        boolean isLoggedIn = grocereasePrefs.getBoolean("isLoggedIn", false);
+    private void firebaseInit() {
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            // User is signed in
+            Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+            String dbRecipesID = mAuth.getCurrentUser().getUid() + "_Recipes";
+            //String dbInventoryID = mAuth.getCurrentUser().getUid() + "_Inventory";
+            //String dbGroceryListID = mAuth.getCurrentUser().getUid() + "_GroceryList";
+            DatabaseReference mFavesRef = FirebaseDatabase.getInstance().getReference(dbRecipesID);
+            //DatabaseReference mInventoryRef = FirebaseDatabase.getInstance().getReference(dbInventoryID);
+            //DatabaseReference mGroceryListRef = FirebaseDatabase.getInstance().getReference(dbGroceryListID);
 
-        if (isLoggedIn && favorites != null){
-            //logic to pull existing favorites from DB if they have logged in previously
-            return new ArrayList<>(favorites);
-        } else {
-            return new ArrayList<>();
+            mFavesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.getValue() != null) {
+                        BrowseRecipesFragment.favorites = (ArrayList<Long>) dataSnapshot.getValue();
+                    }
+                    Log.d("favorite recipes: ", BrowseRecipesFragment.favorites.toString());
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
-
     }
 
     private MultiSpinner.MultiSpinnerListener onSelectedListener = new MultiSpinner.MultiSpinnerListener() {

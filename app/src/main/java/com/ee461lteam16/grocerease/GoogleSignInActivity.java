@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -52,7 +53,7 @@ import java.util.ArrayList;
 /**
  * Demonstrate Firebase Authentication using a Google ID Token.
  */
-public class GoogleSignInActivity extends BaseActivity implements
+public class GoogleSignInActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener {
 
@@ -194,56 +195,6 @@ public class GoogleSignInActivity extends BaseActivity implements
     }
     // [END auth_with_google]
 
-    private void updateFromDatabase() {
-        if (mAuth.getCurrentUser() != null) {
-            String dbRecipesID = mAuth.getCurrentUser().getUid() + "_Recipes";
-            String dbInventoryID = mAuth.getCurrentUser().getUid() + "_Inventory";
-            String dbGroceryListID = mAuth.getCurrentUser().getUid() + "_GroceryList";
-            DatabaseReference mFavesRef = FirebaseDatabase.getInstance().getReference(dbRecipesID);
-            DatabaseReference mInventoryRef = FirebaseDatabase.getInstance().getReference(dbInventoryID);
-            DatabaseReference mGroceryListRef = FirebaseDatabase.getInstance().getReference(dbGroceryListID);
-
-            mFavesRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    BrowseRecipesFragment.favorites = (ArrayList<Long>) dataSnapshot.getValue();
-                    Log.d("favorite recipes: ", BrowseRecipesFragment.favorites.toString());
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-            mInventoryRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    ArrayList<Long> TODO = (ArrayList<Long>) dataSnapshot.getValue();
-                    Log.d("TODO :", TODO.toString());
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-            mGroceryListRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    ArrayList<Long> TODO = (ArrayList<Long>) dataSnapshot.getValue();
-                    Log.d("TODO :", TODO.toString());
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }
-    }
-
     // [START signin]
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
@@ -286,11 +237,6 @@ public class GoogleSignInActivity extends BaseActivity implements
     private void updateUI(FirebaseUser user) {
 //        hideProgressDialog();
         if (user != null) {
-            mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
-            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
-
-            findViewById(R.id.sign_in_button).setVisibility(View.GONE);
-            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
         } else {
             mStatusTextView.setText(R.string.signed_out);
             mDetailTextView.setText(null);
@@ -313,7 +259,6 @@ public class GoogleSignInActivity extends BaseActivity implements
         int i = v.getId();
         if (i == R.id.sign_in_button) {
             signIn();
-            this.updateFromDatabase();
         } else if (i == R.id.sign_out_button) {
             signOut();
         } else if (i == R.id.disconnect_button) {
