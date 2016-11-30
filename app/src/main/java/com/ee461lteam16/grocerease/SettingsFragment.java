@@ -203,13 +203,15 @@ public class SettingsFragment extends ContentFragment implements GoogleApiClient
     private void writeToDatabase() {
         String dbRecipesID = mAuth.getCurrentUser().getUid() + "_Recipes";
 //        String dbInventoryID = mAuth.getCurrentUser().getUid() + "_Inventory";
-//        String dbGroceryListID = mAuth.getCurrentUser().getUid() + "_GroceryList";
+        String dbGroceryListID = mAuth.getCurrentUser().getUid() + "_GroceryList";
         DatabaseReference mFavesRef = FirebaseDatabase.getInstance().getReference(dbRecipesID);
 //        DatabaseReference mInventoryRef = FirebaseDatabase.getInstance().getReference(dbInventoryID);
-//        DatabaseReference mGroceryListRef = FirebaseDatabase.getInstance().getReference(dbGroceryListID);
+        DatabaseReference mGroceryListRef = FirebaseDatabase.getInstance().getReference(dbGroceryListID);
 
         mFavesRef.setValue(BrowseRecipesFragment.favorites);
         BrowseRecipesFragment.favorites.clear();
+        mGroceryListRef.setValue(GroceryListFragment.groceryList);
+        GroceryListFragment.groceryList.clear();
     }
 
 

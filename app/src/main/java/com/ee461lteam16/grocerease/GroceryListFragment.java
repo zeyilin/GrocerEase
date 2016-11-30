@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,14 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,11 +38,38 @@ public class GroceryListFragment extends ContentFragment {
     public final String TAG = "BrowseRecipesFragment";
     public static ArrayList<Ingredient> groceryList = new ArrayList<>();
     public ArrayAdapter<Recipe> adapter;
+    protected FirebaseAuth mAuth;
 
     ListView lv = null;
     Ingredient temp_ingred;
     String temp_ingred_name;
     String temp_ingred_quantity;
+
+    private void firebaseInit() {
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            // User is signed in
+            Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+            String dbGroceryListID = mAuth.getCurrentUser().getUid() + "_GroceryList";
+            DatabaseReference mGroceryListRef = FirebaseDatabase.getInstance().getReference(dbGroceryListID);
+
+            mGroceryListRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() != null) {
+                        GroceryListFragment.groceryList = (ArrayList<Ingredient>) dataSnapshot.getValue();
+                    }
+                    Log.d("current grocery list: ", GroceryListFragment.groceryList.toString());
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,6 +82,7 @@ public class GroceryListFragment extends ContentFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        firebaseInit();
         final Context myContext = this.getContext();
 
         Collections.sort(groceryList);

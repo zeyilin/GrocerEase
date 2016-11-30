@@ -74,7 +74,7 @@ public class Ingredient implements Serializable, Comparable<Ingredient> {
 
     public int compareTo(Ingredient other){
 
-        return this.name.compareToIgnoreCase(other.name);
+        return this.getName().compareToIgnoreCase(other.getName());
     }
 
     @Override

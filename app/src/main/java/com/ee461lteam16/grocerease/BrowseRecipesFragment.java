@@ -59,17 +59,51 @@ public class BrowseRecipesFragment extends ContentFragment {
     public FilterRecipes filterRecipes;
     public static ArrayList<Long> favorites = new ArrayList<>();
     protected FirebaseAuth mAuth;
-    protected FirebaseAuth.AuthStateListener mAuthListener;
     SwipeRefreshLayout refresh;
 
     public BrowseRecipesFragment(){}
+
+    private void firebaseInit() {
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            // User is signed in
+            Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+            String dbRecipesID = mAuth.getCurrentUser().getUid() + "_Recipes";
+            //String dbInventoryID = mAuth.getCurrentUser().getUid() + "_Inventory";
+            //String dbGroceryListID = mAuth.getCurrentUser().getUid() + "_GroceryList";
+            DatabaseReference mFavesRef = FirebaseDatabase.getInstance().getReference(dbRecipesID);
+            //DatabaseReference mInventoryRef = FirebaseDatabase.getInstance().getReference(dbInventoryID);
+            //DatabaseReference mGroceryListRef = FirebaseDatabase.getInstance().getReference(dbGroceryListID);
+
+            mFavesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() != null) {
+                        BrowseRecipesFragment.favorites = (ArrayList<Long>) dataSnapshot.getValue();
+                    }
+                    Log.d("favorite recipes: ", BrowseRecipesFragment.favorites.toString());
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        firebaseInit();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                           Bundle savedInstanceState) {
         // Replace LinearLayout by the type of the root element of the layout you're trying to load
         LinearLayout llLayout    = (LinearLayout)    inflater.inflate(R.layout.fragment_browse_recipes, container, false);
-        firebaseInit();
         return llLayout;
     }
 
@@ -176,6 +210,7 @@ public class BrowseRecipesFragment extends ContentFragment {
             }
         });
 
+        adapter.notifyDataSetChanged();
         MultiSpinner multiSpinner = (MultiSpinner) myActivity.findViewById(R.id.multi_spinner_filter);
 
         filterRecipes = new FilterRecipes();
@@ -201,36 +236,6 @@ public class BrowseRecipesFragment extends ContentFragment {
         });
 
 
-    }
-
-    private void firebaseInit() {
-        mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
-            // User is signed in
-            Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-            String dbRecipesID = mAuth.getCurrentUser().getUid() + "_Recipes";
-            //String dbInventoryID = mAuth.getCurrentUser().getUid() + "_Inventory";
-            //String dbGroceryListID = mAuth.getCurrentUser().getUid() + "_GroceryList";
-            DatabaseReference mFavesRef = FirebaseDatabase.getInstance().getReference(dbRecipesID);
-            //DatabaseReference mInventoryRef = FirebaseDatabase.getInstance().getReference(dbInventoryID);
-            //DatabaseReference mGroceryListRef = FirebaseDatabase.getInstance().getReference(dbGroceryListID);
-
-            mFavesRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getValue() != null) {
-                        BrowseRecipesFragment.favorites = (ArrayList<Long>) dataSnapshot.getValue();
-                    }
-                    Log.d("favorite recipes: ", BrowseRecipesFragment.favorites.toString());
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }
     }
 
     private MultiSpinner.MultiSpinnerListener onSelectedListener = new MultiSpinner.MultiSpinnerListener() {
