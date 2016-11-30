@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by Chris on 11/28/16.
@@ -26,9 +27,7 @@ public class GroceryListFragment extends ContentFragment {
 
 
     public final String TAG = "BrowseRecipesFragment";
-    public ArrayList<Recipe> recipeList = new ArrayList<>();
-    public ArrayList<Recipe> searchRecipeList = new ArrayList<>();
-    public ArrayList<Ingredient> groceryList = new ArrayList<>();
+    public static ArrayList<Ingredient> groceryList = new ArrayList<>();
     public ArrayAdapter<Recipe> adapter;
 
     ListView lv = null;
@@ -118,6 +117,12 @@ public class GroceryListFragment extends ContentFragment {
                 builder.show();
             }
         });
+
+    }
+
+    public static void addIngredients(List<Ingredient> newIngredients){
+
+        groceryList.addAll(newIngredients);
 
     }
 

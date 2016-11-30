@@ -20,7 +20,6 @@ public class Ingredient implements Serializable, Comparable<Ingredient> {
         this.name = name;
         this.description = description;
         this.unit = unit;
-        this.inInventory = false; //fix this later on when comparing recipe ingredients to inventory
     }
 
     public Ingredient(String name, long amount, String unit){

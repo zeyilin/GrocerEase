@@ -77,14 +77,16 @@ public class ItemDeserializer extends StdDeserializer<Recipe> {
             String unit = i.getUnit().toLowerCase();
 
             for (Ingredient j: ingredientList){
+
                 if (j.getName().toLowerCase().equals(name) &&
                         j.getAmount() <= val &&
                         j.getUnit().toLowerCase().equals(unit)) {
                     missingIngredients--;
-                    i.setInInventory(true);
+                    j.setInInventory(true);
                 } else {
-                    i.setInInventory(false);
+                    j.setInInventory(false);
                 }
+
             }
 
         }

@@ -114,4 +114,5 @@
     <string name="inventory_empty">Take a look in your fridge and pantry. Add items you already have here!</string>
     <string name="recipes_empty">No recipe results given search criteria. Try again!</string>
 
+    <string name="move_to_list">Move selected ingredients to grocery list.</string>
 </resources>

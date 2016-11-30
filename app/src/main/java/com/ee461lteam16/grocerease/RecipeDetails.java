@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,6 +25,8 @@ public class RecipeDetails extends Activity {
 
     public Recipe currentRecipe;
     public int index;
+    public List<Ingredient> ingredientList;
+    ListView listview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,31 +47,40 @@ public class RecipeDetails extends Activity {
         TextView ingredientsHeader = (TextView) findViewById(R.id.ingredientsHeader);
         ingredientsHeader.setText("Ingredients");
 
-        ListView ingredients = (ListView) findViewById(R.id.textIngredients);
-        List<Ingredient> ingredientList = currentRecipe.getIngredientList();
+        listview = (ListView) findViewById(R.id.textIngredients);
+        ingredientList = currentRecipe.getIngredientList();
 
         ArrayAdapter<Ingredient> adapter =
-                new ArrayAdapter<Ingredient>(this, android.R.layout.simple_list_item_1, ingredientList) {
+                new ArrayAdapter<Ingredient>(this, R.layout.ingredient_row, R.id.text_ingredient, ingredientList) {
 
                     // Called to map each data element to a view within the list
                     @Override
                     public View getView(int position, View convertView, ViewGroup parent) {
 
                         View view = super.getView(position, convertView, parent);
-                        TextView ingredientStr = (TextView) view.findViewById(android.R.id.text1);
+                        TextView ingredientStr = (TextView) view.findViewById(R.id.text_ingredient);
 
                         Ingredient ingredient = (Ingredient) this.getItem(position);
 
                         ingredientStr.setText(ingredient.getDescription());
+
+                        CheckBox checkBox = (CheckBox) view.findViewById(R.id.check_ingredient);
+
+                        System.out.println(ingredient.getName() + " in inventory? " + ingredient.isInInventory());
+                        if (ingredient.isInInventory()){
+                            checkBox.setChecked(false);
+                        } else {
+                            checkBox.setChecked(true);
+                        }
 
                         return view;
                     }
                 };
 
 
-        ingredients.setAdapter(adapter);
+        listview.setAdapter(adapter);
 
-        ListHelper.getListViewSize(ingredients);
+        ListHelper.getListViewSize(listview);
 
         TextView stepsHeader = (TextView) findViewById(R.id.stepsHeader);
         stepsHeader.setText("Directions");
@@ -102,6 +115,24 @@ public class RecipeDetails extends Activity {
                 }
                 System.out.println("Trying to update list...");
                 BrowseRecipesFragment.updateList();
+            }
+        });
+
+
+        Button move = (Button) findViewById(R.id.move_to_list);
+        move.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                List<Ingredient> moveIngredients = new ArrayList<Ingredient>();
+                for (int i = 0; i < ingredientList.size(); i++){
+                    View view = listview.getChildAt(i);
+                    CheckBox checked = (CheckBox) view.findViewById(R.id.check_ingredient);
+                    if (checked.isChecked()){
+                        moveIngredients.add(ingredientList.get(i));
+                    }
+                }
+                System.out.println("INGREDIENTS TO MOVE: " + moveIngredients.size());
+
+                GroceryListFragment.addIngredients(moveIngredients);
             }
         });
 
