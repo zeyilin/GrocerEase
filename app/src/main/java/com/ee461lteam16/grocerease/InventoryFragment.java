@@ -25,7 +25,7 @@ import java.util.Collections;
 public class InventoryFragment extends ContentFragment {
 
     public final String TAG = "InventoryFragment";
-    ArrayList<Ingredient> Inventory = new ArrayList<>();
+    static ArrayList<Ingredient> Inventory = new ArrayList<>();
     ListView lv = null;
     Ingredient temp_ingred;
     String temp_ingred_name;
@@ -73,9 +73,20 @@ public class InventoryFragment extends ContentFragment {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         temp_ingred_quantity = quantityInput.getText().toString();
-                                        temp_ingred = new Ingredient(temp_ingred_quantity, temp_ingred_name);
+                                        String[] quant_unit = temp_ingred_quantity.split(" ");
+
+                                        long val = 0;
+                                        String unit = "";
+                                        if (quant_unit.length == 1){
+                                            val = Long.parseLong(quant_unit[0]);
+                                        }
+                                        if (quant_unit.length == 2){
+                                            val = Long.parseLong(quant_unit[0]);
+                                            unit = quant_unit[1];
+                                        }
+
+                                        temp_ingred = new Ingredient(temp_ingred_name, val, unit);
                                         Inventory.add(temp_ingred);
-                                        Collections.sort(Inventory);
                                         lv.setAdapter(adapter);
                                     }
 
@@ -104,11 +115,11 @@ public class InventoryFragment extends ContentFragment {
 
     }
 
-    public ArrayList<Ingredient> getInventory(){
+    public static ArrayList<Ingredient> getInventory(){
         return Inventory;
     }
 
-    public Ingredient getInventoryItem(int index){
+    public  Ingredient getInventoryItem(int index){
         return Inventory.get(index);
     }
 

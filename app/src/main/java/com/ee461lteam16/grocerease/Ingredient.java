@@ -23,9 +23,11 @@ public class Ingredient implements Serializable, Comparable<Ingredient> {
         this.inInventory = false; //fix this later on when comparing recipe ingredients to inventory
     }
 
-    public Ingredient(String amountInUnits, String name){
-        this.amountInUnits = amountInUnits;
+    public Ingredient(String name, long amount, String unit){
         this.name = name;
+        this.amount = amount;
+        this.unit = unit;
+
         // REFERENCE INGREDIENT DATABASE TO FIND UNITS OF COMMON INGREDIENTS
     }
 
@@ -77,7 +79,7 @@ public class Ingredient implements Serializable, Comparable<Ingredient> {
     }
 
     @Override
-    public String toString() {
-        return amountInUnits + " " + name;
+    public String toString(){
+        return this.amount + " " + this.unit + " " + this.name;
     }
 }

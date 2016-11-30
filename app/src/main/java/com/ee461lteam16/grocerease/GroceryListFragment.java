@@ -79,9 +79,20 @@ public class GroceryListFragment extends ContentFragment {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         temp_ingred_quantity = quantityInput.getText().toString();
-                                        temp_ingred = new Ingredient(temp_ingred_quantity, temp_ingred_name);
+                                        String[] quant_unit = temp_ingred_quantity.split(" ");
+
+                                        long val = 0;
+                                        String unit = "";
+                                        if (quant_unit.length == 1){
+                                            val = Long.parseLong(quant_unit[0]);
+                                        }
+                                        if (quant_unit.length == 2){
+                                            val = Long.parseLong(quant_unit[0]);
+                                            unit = quant_unit[1];
+                                        }
+
+                                        temp_ingred = new Ingredient(temp_ingred_name, val, unit);
                                         groceryList.add(temp_ingred);
-                                        Collections.sort(groceryList);
                                         lv.setAdapter(adapter);
                                     }
 

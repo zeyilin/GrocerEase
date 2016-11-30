@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,9 @@ public class BrowseRecipesFragment extends ContentFragment {
     public static ArrayAdapter<Recipe> adapter;
     public FilterRecipes filterRecipes;
     public static ArrayList<Long> favorites;
+    SwipeRefreshLayout refresh;
+
+    public BrowseRecipesFragment(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -84,6 +88,7 @@ public class BrowseRecipesFragment extends ContentFragment {
                         TextView title = (TextView) view.findViewById(R.id.Recipe_title);
                         TextView minutes = (TextView) view.findViewById(R.id.minutes);
                         TextView servings = (TextView) view.findViewById(R.id.servings);
+                        TextView missingIngreds = (TextView) view.findViewById(R.id.missingIngreds);
                         ImageView image = (ImageView) view.findViewById(R.id.Recipe_icon);
                         ImageView favorite = (ImageView) view.findViewById(R.id.Recipe_favorited);
 
@@ -92,6 +97,7 @@ public class BrowseRecipesFragment extends ContentFragment {
                         title.setText(recipe.getTitle());
                         minutes.setText(recipe.getReadyInString());
                         servings.setText(recipe.getServingsString());
+                        missingIngreds.setText(recipe.getMissingIngredsString());
                         Picasso.with(view.getContext()).load(recipe.getImageURL()).placeholder(view.getContext().getResources().getIdentifier("@drawable/grocerease", null, "com.ee461lteam16.grocerease")).into(image);
 
                         if (recipe.isFavorited()) {
@@ -165,7 +171,27 @@ public class BrowseRecipesFragment extends ContentFragment {
 
         multiSpinner.setItems(items, getString(R.string.for_all), onSelectedListener);
 
+        refresh = (SwipeRefreshLayout) myActivity.findViewById(R.id.swipe_refresh_layout);
+
+        refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                refresh.setRefreshing(true);
+
+                searchRecipeList.clear();
+                searchRecipeList.addAll(getRecipes());
+                Collections.sort(searchRecipeList, new SortByFavorite());
+                adapter.notifyDataSetChanged();
+
+                refresh.setRefreshing(false);
+            }
+        });
+
+
     }
+
+
 
     public ArrayList<Long> getFavorites(){
 
