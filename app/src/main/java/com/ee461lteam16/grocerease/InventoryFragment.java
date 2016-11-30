@@ -8,8 +8,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,6 +31,8 @@ public class InventoryFragment extends ContentFragment {
     Ingredient temp_ingred;
     String temp_ingred_name;
     String temp_ingred_quantity;
+    public IngredientListAdapter adapter;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,7 +47,7 @@ public class InventoryFragment extends ContentFragment {
         final Context myContext = this.getContext();
 
         Collections.sort(Inventory);
-        final ListAdapter adapter = new IngredientListAdapter(Inventory, myContext);
+        adapter = new IngredientListAdapter(Inventory, myContext);
         lv = (ListView) this.getView().findViewById(R.id.inventoryList);
         lv.setAdapter(adapter);
         lv.setEmptyView(this.getView().findViewById(android.R.id.empty));
@@ -113,6 +116,29 @@ public class InventoryFragment extends ContentFragment {
             }
         });
 
+        Button delete = (Button) view.findViewById(R.id.delete_from_inventory);
+        delete.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                deleteSelected();
+
+            }
+        });
+
+    }
+
+    public void deleteSelected(){
+
+        for (int i = 0; i < Inventory.size(); i++){
+            View view = lv.getChildAt(i);
+            CheckBox checked = (CheckBox) view.findViewById(R.id.check_grocery_item);
+            if (checked.isChecked()){
+                checked.setChecked(false);
+                adapter.remove(i);
+            }
+        }
+        adapter.notifyDataSetChanged();
+
     }
 
     public static ArrayList<Ingredient> getInventory(){
@@ -121,6 +147,10 @@ public class InventoryFragment extends ContentFragment {
 
     public  Ingredient getInventoryItem(int index){
         return Inventory.get(index);
+    }
+
+    public static void addIngredients(ArrayList<Ingredient> add){
+        Inventory.addAll(add);
     }
 
 }
