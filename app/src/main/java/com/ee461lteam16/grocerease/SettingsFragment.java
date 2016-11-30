@@ -168,7 +168,6 @@ public class SettingsFragment extends ContentFragment implements GoogleApiClient
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             }
-
         });
 
         signOutButton.setOnClickListener(new View.OnClickListener() {

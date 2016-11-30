@@ -248,7 +248,6 @@ public class GoogleSignInActivity extends BaseActivity implements
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
-        this.updateFromDatabase();
         isLoggedIn = true;
         grocereasePrefs.edit().putBoolean("isLoggedIn", isLoggedIn).commit();
     }
@@ -314,6 +313,7 @@ public class GoogleSignInActivity extends BaseActivity implements
         int i = v.getId();
         if (i == R.id.sign_in_button) {
             signIn();
+            this.updateFromDatabase();
         } else if (i == R.id.sign_out_button) {
             signOut();
         } else if (i == R.id.disconnect_button) {

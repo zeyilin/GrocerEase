@@ -2,9 +2,11 @@ package com.ee461lteam16.grocerease;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +54,11 @@ public class BrowseRecipesFragment extends ContentFragment {
     public static ArrayAdapter<Recipe> adapter;
     public FilterRecipes filterRecipes;
     public static ArrayList<Long> favorites;
+
+//    public static boolean cleanFavorites() {
+//        favorites.clear();
+//        return true;
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -110,7 +117,7 @@ public class BrowseRecipesFragment extends ContentFragment {
                             Drawable res = getResources().getDrawable(imageResource);
 
                             favorite.setImageDrawable(res);
-                        }else {
+                        } else {
                             favorite.setVisibility(View.GONE);
                         }
 
@@ -172,10 +179,12 @@ public class BrowseRecipesFragment extends ContentFragment {
     }
 
     public ArrayList<Long> getFavorites(){
+        SharedPreferences grocereasePrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        boolean isLoggedIn = grocereasePrefs.getBoolean("isLoggedIn", false);
 
-        if (false){
+        if (isLoggedIn && favorites != null){
             //logic to pull existing favorites from DB if they have logged in previously
-            return new ArrayList<>();
+            return new ArrayList<>(favorites);
         } else {
             return new ArrayList<>();
         }
