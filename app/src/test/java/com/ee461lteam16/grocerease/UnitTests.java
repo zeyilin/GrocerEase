@@ -1,5 +1,6 @@
 package com.ee461lteam16.grocerease;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,24 +36,30 @@ public class UnitTests {
         testGroceryList.add(testIngredient3);
     }
 
+    @After
+    public void clearLists() {
+        testInventory.clear();
+        testGroceryList.clear();
+    }
+
     @Test
-    public void Ingredient1ToString_isCorrect() throws Exception {
+    public void Ingredient1ToString_Test() throws Exception {
         assertEquals("12.0 cups flour", testIngredient1.toString());
     }
 
     @Test
-    public void Ingredient2ToString_isCorrect() throws Exception {
+    public void Ingredient2ToString_Test() throws Exception {
         assertEquals("2.0 gallons milk", testIngredient2.toString());
     }
 
     @Test
-    public void AddIngredientsInventory_isCorrect() throws Exception {
+    public void AddIngredientsInventory_Test() throws Exception {
         testInventoryFragment.addIngredients(testInventory);
         assertEquals(testInventoryFragment.Inventory, testInventory);
     }
 
     @Test
-    public void AddIngredientsGroceryList_isCorrect() throws Exception {
+    public void AddIngredientsGroceryList_Test() throws Exception {
         testGroceryListFragment.addIngredients(testGroceryList);
         assertEquals(testGroceryListFragment.groceryList, testGroceryList);
 
@@ -60,7 +67,7 @@ public class UnitTests {
 
     // Not sure if this is a unit test ??
     @Test
-    public void getFilteredRecipes_isCorrect() throws Exception {
+    public void getFilteredRecipes_Test() throws Exception {
 
     }
 }
