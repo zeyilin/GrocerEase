@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,8 +60,6 @@ public class InventoryFragment extends ContentFragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                System.out.println(Inventory.get(0).getName());
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(myContext);
                 builder.setTitle(getString(R.string.add_item_prompt));
                 final EditText input = new EditText(myContext);
@@ -84,7 +83,7 @@ public class InventoryFragment extends ContentFragment {
                                         long val = 0;
                                         String unit = "";
                                         if (quant_unit.length == 1){
-                                            val = Long.parseLong(quant_unit[0]);
+                                                val = Long.parseLong(quant_unit[0]);
                                         }
                                         if (quant_unit.length == 2){
                                             val = Long.parseLong(quant_unit[0]);
