@@ -34,6 +34,7 @@ public class GroceryListFragment extends ContentFragment {
     Ingredient temp_ingred;
     String temp_ingred_name;
     String temp_ingred_quantity;
+    public View rootView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,6 +42,9 @@ public class GroceryListFragment extends ContentFragment {
         this.getActivity().setTheme(R.style.AppTheme);
         // Replace LinearLayout by the type of the root element of the layout you're trying to load
         RelativeLayout llLayout    = (RelativeLayout)    inflater.inflate(R.layout.fragment_grocery_list, container, false);
+
+        rootView = inflater.inflate(R.layout.fragment_grocery_list, container, false);
+
         return llLayout;
     }
 
@@ -122,10 +126,11 @@ public class GroceryListFragment extends ContentFragment {
         move.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                List<Ingredient> toMove = findSelected();
-                System.out.println("INGREDIENTS TO MOVE: " + toMove.size());
-                InventoryFragment.addIngredients(toMove);
-
+                if (lv!=null) {
+                    List<Ingredient> toMove = findSelected();
+                    System.out.println("INGREDIENTS TO MOVE: " + toMove.size());
+                    InventoryFragment.addIngredients(toMove);
+                }
             }
         });
 
@@ -147,11 +152,14 @@ public class GroceryListFragment extends ContentFragment {
         for (int i = 0; i < groceryList.size(); i++){
             View view = lv.getChildAt(i);
             CheckBox checked = (CheckBox) view.findViewById(R.id.check_grocery_item);
-            if (checked.isChecked()){
-                selectedIngredients.add(groceryList.get(i));
-                toRemove.add(i);
+            if (checked != null){
+                if (checked.isChecked()) {
+                    selectedIngredients.add(groceryList.get(i));
+                    toRemove.add(i);
+                }
+                checked.setChecked(false);
             }
-            checked.setChecked(false);
+
         }
 
         for (int i = toRemove.size() - 1; i >= 0; i--){

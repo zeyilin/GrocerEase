@@ -46,12 +46,12 @@ public class InventoryListAdapter extends BaseAdapter implements ListAdapter {
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.grocery_row, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.inventory_row, parent, false);
         }
 
         // Lookup view for data population
         TextView item_name = (TextView) convertView.findViewById(R.id.item_name);
-        CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.check_ingredient);
+        CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.check_inventory_item);
         // Populate the data into the template view using the data object
         item_name.setText(item.toString());
 

@@ -51,7 +51,8 @@ public class IngredientListAdapter extends BaseAdapter implements ListAdapter {
 
         // Lookup view for data population
         TextView item_name = (TextView) convertView.findViewById(R.id.item_name);
-        CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.check_ingredient);
+        CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.check_grocery_item);
+        checkBox.setChecked(false);
         // Populate the data into the template view using the data object
         item_name.setText(item.toString());
 

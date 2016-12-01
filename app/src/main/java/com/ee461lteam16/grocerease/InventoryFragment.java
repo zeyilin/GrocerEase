@@ -134,7 +134,7 @@ public class InventoryFragment extends ContentFragment {
         List<Integer> toRemove = new ArrayList<>();
         for (int i = 0; i < Inventory.size(); i++){
             View view = lv.getChildAt(i);
-            CheckBox checked = (CheckBox) view.findViewById(R.id.check_grocery_item);
+            CheckBox checked = (CheckBox) view.findViewById(R.id.check_inventory_item);
             if (checked.isChecked()){
                 toRemove.add(i);
             }
@@ -162,10 +162,10 @@ public class InventoryFragment extends ContentFragment {
     }
 
     public static void addIngredients(List<Ingredient> add){
+
         Inventory.addAll(add);
-        if(adapter != null){
-            adapter.notifyDataSetChanged();
-        }
+        adapter.notifyDataSetChanged();
+
     }
 
 }
