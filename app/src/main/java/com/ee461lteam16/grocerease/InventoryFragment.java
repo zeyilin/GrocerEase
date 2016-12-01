@@ -163,7 +163,9 @@ public class InventoryFragment extends ContentFragment {
 
     public static void addIngredients(List<Ingredient> add){
         Inventory.addAll(add);
-        adapter.notifyDataSetChanged();
+        if(adapter != null){
+            adapter.notifyDataSetChanged();
+        }
     }
 
 }
